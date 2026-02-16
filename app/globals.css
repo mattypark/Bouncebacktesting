@@ -1,0 +1,116 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-bb-deep: #084734;
+  --color-bb-mid: #65BE44;
+  --color-bb-lime: #CEF17B;
+  --color-bb-mint: #E5FCCD;
+  --color-bb-cream: #FBFFF1;
+  --color-bb-red: #A83232;
+
+  --font-inter: "Inter", sans-serif;
+
+  --animate-fade-in-up: fadeInUp 0.8s ease-out both;
+  --animate-fade-in-up-delayed-1: fadeInUp 0.8s ease-out 0.15s both;
+  --animate-fade-in-up-delayed-2: fadeInUp 0.8s ease-out 0.3s both;
+  --animate-fade-in-up-delayed-3: fadeInUp 0.8s ease-out 0.45s both;
+  --animate-fade-in-up-delayed-4: fadeInUp 0.8s ease-out 0.6s both;
+  --animate-scale-in: scaleIn 1s ease-out 0.2s both;
+  --animate-slide-in-bottom: slideInBottom 1s ease-out 0.4s both;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-line-extend: lineExtend 0.8s ease-out 0.3s both;
+  --animate-social-fade: socialFade 0.6s ease-out 0.8s both;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes slideInBottom {
+  from {
+    opacity: 0;
+    transform: translateY(80px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+@keyframes lineExtend {
+  from {
+    width: 0;
+    opacity: 0;
+  }
+  to {
+    width: 100px;
+    opacity: 1;
+  }
+}
+
+@keyframes socialFade {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+}
+
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: var(--font-inter);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+}
+
+.hero-gradient {
+  background: linear-gradient(
+    to right,
+    #084734 0%,
+    #1A5C2E 15%,
+    #2B7A28 30%,
+    #4A9E35 50%,
+    #7CC850 65%,
+    #A8DE6A 78%,
+    #CEF17B 88%,
+    #E5FCCD 100%
+  );
+}
