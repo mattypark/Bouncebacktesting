@@ -200,24 +200,24 @@ export default function HeroSection() {
       </AnimatePresence>
 
       {/* ─── Left Content Block (BB-1 + Headline + Body + CTA) ─── */}
-      <div className="absolute z-30 px-6 top-[18%] left-0 right-0 md:px-0 md:right-auto md:left-[6%] md:top-[16%] lg:left-[5%]">
-        {/* BB-1 Label — always top-left above headline */}
-        <div className="animate-fade-in-up flex items-center gap-4">
-          <h2 className="text-xl font-medium text-white md:text-3xl lg:text-4xl xl:text-5xl">
+      <div className="absolute top-[16%] left-[5%] z-30 md:left-[6%] lg:left-[5%]">
+        {/* BB-1 Label */}
+        <div className="animate-fade-in-up flex items-center gap-4 ml-[10%] md:ml-[55%]">
+          <h2 className="text-2xl font-medium text-white md:text-3xl lg:text-4xl xl:text-5xl">
             BB-1
           </h2>
-          <div className="animate-line-extend h-[1.5px] w-16 bg-white md:w-24 lg:w-32" />
+          <div className="animate-line-extend h-[1.5px] bg-white" />
         </div>
 
         {/* Headline */}
-        <h1 className="animate-fade-in-up-delayed-1 mt-3 text-4xl font-bold leading-[1.05] text-white md:mt-6 md:text-6xl lg:text-7xl xl:text-8xl">
+        <h1 className="animate-fade-in-up-delayed-1 mt-4 text-5xl font-bold leading-[1.05] text-white md:mt-6 md:text-6xl lg:text-7xl xl:text-8xl">
           Saving the
           <br />
           World
         </h1>
 
         {/* Body text */}
-        <p className="animate-fade-in-up-delayed-2 mt-4 max-w-[300px] text-xs leading-relaxed text-white/90 md:mt-6 md:max-w-[380px] md:text-sm lg:text-base">
+        <p className="animate-fade-in-up-delayed-2 mt-6 max-w-[380px] text-sm leading-relaxed text-white/90 md:text-base">
           Built for players. Designed for the planet
           <br />
           BounceBack is the first recycled pickleball with the same feel and
@@ -225,16 +225,16 @@ export default function HeroSection() {
         </p>
 
         {/* CTA Buttons */}
-        <div className="animate-fade-in-up-delayed-3 mt-5 flex flex-wrap items-center gap-3 md:mt-7 md:gap-4">
+        <div className="animate-fade-in-up-delayed-3 mt-7 flex items-center gap-4">
           <a
             href="/shop"
-            className="inline-block border-2 border-white px-6 py-3 text-[10px] font-semibold tracking-[0.15em] text-white transition-all duration-300 hover:bg-white hover:text-bb-deep md:px-8 md:py-3.5 md:text-xs"
+            className="inline-block border-2 border-white px-8 py-3.5 text-xs font-semibold tracking-[0.15em] text-white transition-all duration-300 hover:bg-white hover:text-bb-deep"
           >
             JOIN THE MOVEMENT
           </a>
           <a
             href="/bb-1"
-            className="inline-block bg-white px-6 py-3 text-[10px] font-semibold tracking-[0.15em] text-bb-deep transition-all duration-300 hover:bg-bb-lime md:px-8 md:py-3.5 md:text-xs"
+            className="inline-block bg-white px-8 py-3.5 text-xs font-semibold tracking-[0.15em] text-bb-deep transition-all duration-300 hover:bg-bb-lime"
           >
             BUY BB-1
           </a>
@@ -247,10 +247,10 @@ export default function HeroSection() {
         alt="BB-1 Recycled Pickleball"
         className="animate-scale-in pointer-events-none absolute z-20"
         style={{
-          width: "clamp(280px, 70vw, 1300px)",
-          right: "-10%",
-          top: "45%",
-          transform: "translateY(-50%)",
+          width: "clamp(550px, 80vw, 1300px)",
+          left: "50%",
+          top: "42%",
+          transform: "translate(-50%, -50%)",
         }}
       />
 
@@ -259,7 +259,7 @@ export default function HeroSection() {
         <p
           className="select-none text-center font-black leading-none text-white"
           style={{
-            fontSize: "clamp(3.5rem, 14vw, 16rem)",
+            fontSize: "clamp(6rem, 14vw, 16rem)",
             letterSpacing: "-0.02em",
           }}
         >
