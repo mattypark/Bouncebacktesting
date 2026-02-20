@@ -95,7 +95,7 @@ export default function WasteStatSection() {
       className="relative flex min-h-screen w-full items-center bg-bb-lime"
     >
       {/* ─── Content ─── */}
-      <div className="mx-auto w-full max-w-[89rem] px-8 md:px-14 lg:px-20">
+      <div className="mx-auto w-full max-w-[89rem] px-8 md:px-14 lg:px-20" style={{ marginLeft: "calc(50% - 5px)", transform: "translateX(-53%)" }}>
         {/* Label */}
         <p className="text-xl font-bold text-bb-deep md:text-2xl lg:text-3xl">
           Pickleball Creates
@@ -105,7 +105,7 @@ export default function WasteStatSection() {
         <div className="relative inline-block">
           <h2
             className="whitespace-nowrap font-bold leading-none tracking-tight text-bb-deep"
-            style={{ fontSize: "clamp(7rem, 18vw, 22rem)" }}
+            style={{ fontSize: "clamp(7rem, 18vw, 22rem)", marginLeft: "-1px" }}
             aria-label={TARGET.toLocaleString("en-US")}
           >
             {parts.map((part, i) => {

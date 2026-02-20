@@ -40,18 +40,30 @@ export default function TheProcessSection() {
   }, [active]);
 
   return (
-    <section className="w-full bg-white py-24 md:py-32">
+    <section className="w-full bg-bb-cream py-24 md:py-32">
       <div className="mx-auto max-w-7xl px-6 md:px-10">
         {/* Heading */}
         <h2 className="mb-14 text-center text-3xl font-bold text-black md:mb-20 md:text-4xl lg:text-5xl">
           The process?
         </h2>
 
-        {/* Two-column layout — items-stretch so both columns share height */}
-        <div className="flex flex-col gap-10 md:flex-row md:items-stretch md:gap-12 lg:gap-16">
-          {/* Left column — video stretches to match cards height */}
-          <div className="mx-auto flex w-[65%] flex-col md:mx-0 md:w-[38%]">
-            <div className="relative flex-1 overflow-hidden rounded-2xl bg-bb-mint">
+        {/*
+          Two-column layout
+          ─────────────────
+          • Left : video with 9/16 aspect ratio — this sets the row height
+          • Right: cards stretch to fill the same height (flex-1 on each card)
+
+          To adjust positioning / size, change these values:
+            ┌─ Video width ──────── md:w-[32%]  (increase = wider phone)
+            ├─ Video aspect ratio ─ aspect-[9/16] (change to 3/5, 2/3, etc.)
+            ├─ Cards width ──────── md:w-[62%]  (should roughly = 100% - video%)
+            ├─ Cards gap ─────────── md:gap-5    (space between cards)
+            └─ Column gap ────────── md:gap-14   (space between video & cards)
+        */}
+        <div className="flex flex-col gap-10 md:flex-row md:items-stretch md:gap-14 lg:gap-16">
+          {/* Left column — video with fixed 9/16 ratio */}
+          <div className="mx-auto flex w-[65%] flex-col md:mx-0 md:w-[32%]">
+            <div className="relative aspect-[9/16] w-full overflow-hidden rounded-2xl bg-bb-mint">
               {STEPS.map((step, i) => (
                 <video
                   key={i}
@@ -85,8 +97,8 @@ export default function TheProcessSection() {
             </div>
           </div>
 
-          {/* Right column — step cards define the natural height */}
-          <div className="flex w-full flex-col gap-4 md:w-[58%] md:gap-5">
+          {/* Right column — cards stretch evenly to match video height */}
+          <div className="flex w-full flex-col gap-4 md:w-[62%] md:gap-5">
             {STEPS.map((step, i) => {
               const isActive = active === i;
               return (
@@ -94,14 +106,14 @@ export default function TheProcessSection() {
                   key={i}
                   type="button"
                   onClick={() => setActive(i)}
-                  className={`rounded-xl p-5 text-left transition-all duration-300 md:p-6 ${
+                  className={`flex-1 rounded-xl p-6 text-left transition-all duration-300 md:p-8 ${
                     isActive
                       ? "bg-bb-deep shadow-lg"
                       : "bg-bb-mint hover:bg-bb-mint/80"
                   }`}
                 >
                   <p
-                    className={`mb-1.5 text-base font-bold md:text-lg ${
+                    className={`mb-2 text-base font-bold md:text-lg ${
                       isActive ? "text-white" : "text-bb-deep"
                     }`}
                   >

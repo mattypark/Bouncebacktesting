@@ -1,111 +1,274 @@
 "use client";
 
+import { useState, useEffect, useRef, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import CartIcon from "./CartIcon";
+
+const menuLinks = [
+  { name: "Home", href: "/" },
+  { name: "Shop", href: "/shop" },
+  { name: "About", href: "/about" },
+  { name: "Buy Balls", href: "/bb-1" },
+  { name: "Request a Bin", href: "/request-bin" },
+  { name: "Account", href: "/account" },
+];
+
 export default function HeroSection() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isPastHero, setIsPastHero] = useState(false);
+  const [clipOrigin, setClipOrigin] = useState("calc(100% - 48px) 28px");
+  const hamburgerRef = useRef<HTMLButtonElement>(null);
+
+  const updateClipOrigin = useCallback(() => {
+    if (hamburgerRef.current) {
+      const rect = hamburgerRef.current.getBoundingClientRect();
+      const x = rect.left + rect.width / 2;
+      const y = rect.top + rect.height / 2;
+      setClipOrigin(`${x}px ${y}px`);
+    }
+  }, []);
+
+  useEffect(() => {
+    function onScroll() {
+      setIsPastHero(window.scrollY > window.innerHeight * 0.85);
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
     <section className="hero-gradient relative h-screen w-full overflow-hidden">
       {/* ─── Navigation ─── */}
-      <nav className="fixed top-0 left-0 z-50 flex w-full items-center justify-between px-10 py-4 md:px-12 md:py-5 lg:px-16 lg:py-6">
-        <a href="/" className="flex items-baseline text-xl text-white md:text-2xl">
+      <nav className="fixed top-0 left-0 z-50 flex w-full items-center justify-between px-10 py-4 transition-colors duration-300 md:px-12 md:py-5 lg:px-16 lg:py-6">
+        <a
+          href="/"
+          className="flex items-baseline text-xl transition-colors duration-300 md:text-2xl"
+          style={{ zIndex: 60, color: isMenuOpen ? "#fff" : isPastHero ? "#084734" : "#fff" }}
+        >
           <span className="font-bold tracking-tight">Bounce</span>
           <span className="font-light tracking-tight">Back</span>
         </a>
 
-        <div className="hidden items-center gap-14 md:flex lg:gap-20">
-          <a
-            href="/"
-            className="text-[15px] text-white transition-opacity duration-200 hover:opacity-80"
-          >
-            Home
-          </a>
-          <a
-            href="/shop"
-            className="text-[15px] text-white transition-opacity duration-200 hover:opacity-80"
-          >
-            Shop
-          </a>
-          <a
-            href="/about"
-            className="text-[15px] text-white transition-opacity duration-200 hover:opacity-80"
-          >
-            About
-          </a>
-        </div>
 
-        <button
-          aria-label="Open menu"
-          className="flex flex-col items-end gap-[5px]"
-        >
-          <span className="block h-[2px] w-7 bg-white" />
-          <span className="block h-[2px] w-7 bg-white" />
-          <span className="block h-[2px] w-5 bg-white" />
-        </button>
+        {/* Cart + Hamburger */}
+        <div className="flex items-center gap-5">
+          <CartIcon color={isMenuOpen ? "#CEF17B" : "#084734"} />
+
+          {/* Hamburger / X button */}
+          <button
+            ref={hamburgerRef}
+            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+            onClick={() => {
+              updateClipOrigin();
+              setIsMenuOpen((prev) => !prev);
+            }}
+            className="relative z-[60] flex flex-col items-end gap-[5px]"
+          >
+            <motion.span
+              className="block h-[2px] w-7 origin-center"
+              animate={
+                isMenuOpen
+                  ? { rotate: 45, y: 7, backgroundColor: "#CEF17B" }
+                  : { rotate: 0, y: 0, backgroundColor: "#084734" }
+              }
+              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            />
+            <motion.span
+              className="block h-[2px] w-7 origin-center"
+              animate={
+                isMenuOpen
+                  ? { opacity: 0, backgroundColor: "#CEF17B" }
+                  : { opacity: 1, backgroundColor: "#084734" }
+              }
+              transition={{ duration: 0.15 }}
+            />
+            <motion.span
+              className="block h-[2px] origin-center"
+              style={{ width: isMenuOpen ? "1.75rem" : "1.25rem" }}
+              animate={
+                isMenuOpen
+                  ? { rotate: -45, y: -7, backgroundColor: "#CEF17B", width: "1.75rem" }
+                  : { rotate: 0, y: 0, backgroundColor: "#084734", width: "1.25rem" }
+              }
+              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            />
+          </button>
+        </div>
       </nav>
 
+      {/* ─── Circle Reveal Menu Overlay ─── */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            className="fixed inset-0 z-[55] flex flex-col bg-bb-deep"
+            initial={{ clipPath: `circle(0% at ${clipOrigin})` }}
+            animate={{ clipPath: `circle(150% at ${clipOrigin})` }}
+            exit={{ clipPath: `circle(0% at ${clipOrigin})` }}
+            transition={{
+              duration: 0.6,
+              ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
+            }}
+          >
+            {/* X close button — top right */}
+            <div className="flex w-full justify-end px-10 py-4 md:px-12 md:py-5 lg:px-16 lg:py-6">
+              <button
+                aria-label="Close menu"
+                onClick={() => setIsMenuOpen(false)}
+                className="text-bb-lime/70 transition-colors duration-200 hover:text-bb-lime"
+              >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+                  <line x1="4" y1="4" x2="20" y2="20" />
+                  <line x1="20" y1="4" x2="4" y2="20" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Menu content — links left, buttons right */}
+            <div className="flex flex-1 items-center px-10 md:px-16 lg:px-24">
+              {/* Links — left side */}
+              <div className="flex flex-1 flex-col justify-center">
+                {menuLinks.map((link, i) => (
+                  <motion.div
+                    key={link.name}
+                    initial={{ opacity: 0, x: 40 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 20 }}
+                    transition={{
+                      delay: 0.15 + i * 0.08,
+                      duration: 0.5,
+                      ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
+                    }}
+                  >
+                    <a
+                      href={link.href}
+                      onClick={() => setIsMenuOpen(false)}
+                      className="group relative inline-flex items-center gap-3 overflow-visible py-2 text-4xl font-light text-bb-lime/90 transition-colors duration-300 hover:text-bb-lime md:text-5xl md:gap-4 lg:text-6xl lg:gap-5"
+                      style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}
+                    >
+                      <span className="relative inline-block after:absolute after:bottom-0 after:left-0 after:h-[1px] after:w-full after:origin-left after:scale-x-0 after:bg-bb-lime after:transition-transform after:duration-500 after:ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:after:scale-x-100">
+                        {link.name}
+                      </span>
+                      <span className="inline-block h-[10px] w-[10px] rounded-full bg-bb-lime opacity-0 scale-0 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:opacity-100 group-hover:scale-100 md:h-[12px] md:w-[12px] lg:h-[14px] lg:w-[14px]" />
+                    </a>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* Join the movement — right side, text link */}
+              <motion.div
+                className="hidden lg:flex"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  delay: 0.4,
+                  duration: 0.5,
+                  ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
+                }}
+              >
+                <a
+                  href="/shop"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="group relative text-sm font-semibold tracking-[0.15em] text-bb-lime/80 transition-colors duration-300 hover:text-bb-lime"
+                >
+                  <span className="relative inline-block after:absolute after:bottom-0 after:left-0 after:h-[1px] after:w-full after:origin-left after:scale-x-0 after:bg-bb-lime after:transition-transform after:duration-500 after:ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:after:scale-x-100">
+                    JOIN THE MOVEMENT
+                  </span>
+                </a>
+              </motion.div>
+            </div>
+
+            {/* Bottom section — divider + tagline + copyright */}
+            <motion.div
+              className="px-10 pb-8 md:px-16 lg:px-24"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5, duration: 0.6 }}
+            >
+              <div className="mb-6 h-[1px] w-full bg-bb-lime/20" />
+              <div className="flex items-end justify-between">
+                <p className="text-sm text-bb-lime/40">
+                  recycled pickleballs. built for players. designed for the planet.
+                </p>
+                <p className="text-sm text-bb-lime/40">
+                  &copy; {new Date().getFullYear()} BounceBack
+                </p>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* ─── Left Content Block (BB-1 + Headline + Body + CTA) ─── */}
-      <div className="absolute top-[16%] left-[5%] z-30 md:left-[6%] lg:left-[5%]">
-        {/* BB-1 Label */}
+      <div className="absolute z-30 px-6 top-[18%] left-0 right-0 md:px-0 md:right-auto md:left-[6%] md:top-[16%] lg:left-[5%]">
+        {/* BB-1 Label — always top-left above headline */}
         <div className="animate-fade-in-up flex items-center gap-4">
-          <h2 className="text-2xl font-medium text-white md:text-3xl lg:text-4xl xl:text-5xl">
+          <h2 className="text-xl font-medium text-white md:text-3xl lg:text-4xl xl:text-5xl">
             BB-1
           </h2>
-          <div className="animate-line-extend h-[1.5px] bg-white" />
+          <div className="animate-line-extend h-[1.5px] w-16 bg-white md:w-24 lg:w-32" />
         </div>
 
         {/* Headline */}
-        <h1 className="animate-fade-in-up-delayed-1 mt-4 text-5xl font-bold leading-[1.05] text-white md:mt-6 md:text-6xl lg:text-7xl xl:text-8xl">
+        <h1 className="animate-fade-in-up-delayed-1 mt-3 text-4xl font-bold leading-[1.05] text-white md:mt-6 md:text-6xl lg:text-7xl xl:text-8xl">
           Saving the
           <br />
           World
         </h1>
 
         {/* Body text */}
-        <p className="animate-fade-in-up-delayed-2 mt-6 max-w-[380px] text-sm leading-relaxed text-white/90 md:text-base">
+        <p className="animate-fade-in-up-delayed-2 mt-4 max-w-[300px] text-xs leading-relaxed text-white/90 md:mt-6 md:max-w-[380px] md:text-sm lg:text-base">
           Built for players. Designed for the planet
           <br />
           BounceBack is the first recycled pickleball with the same feel and
           performance as professional balls.
         </p>
 
-        {/* CTA Button */}
-        <a
-          href="/shop"
-          className="animate-fade-in-up-delayed-3 mt-7 inline-block border-2 border-white px-8 py-3.5 text-xs font-semibold tracking-[0.15em] text-white transition-all duration-300 hover:bg-white hover:text-bb-deep"
-        >
-          JOIN THE MOVEMENT
-        </a>
+        {/* CTA Buttons */}
+        <div className="animate-fade-in-up-delayed-3 mt-5 flex flex-wrap items-center gap-3 md:mt-7 md:gap-4">
+          <a
+            href="/shop"
+            className="inline-block border-2 border-white px-6 py-3 text-[10px] font-semibold tracking-[0.15em] text-white transition-all duration-300 hover:bg-white hover:text-bb-deep md:px-8 md:py-3.5 md:text-xs"
+          >
+            JOIN THE MOVEMENT
+          </a>
+          <a
+            href="/bb-1"
+            className="inline-block bg-white px-6 py-3 text-[10px] font-semibold tracking-[0.15em] text-bb-deep transition-all duration-300 hover:bg-bb-lime md:px-8 md:py-3.5 md:text-xs"
+          >
+            BUY BB-1
+          </a>
+        </div>
       </div>
 
-      {/* ─── Green Circle ─── */}
-      <div
-        className="animate-scale-in pointer-events-none absolute z-20 aspect-square rounded-full"
+      {/* ─── BB-1 Ball Image ─── */}
+      <img
+        src="/bb1-ball.png"
+        alt="BB-1 Recycled Pickleball"
+        className="animate-scale-in pointer-events-none absolute z-20"
         style={{
-          background:
-            "radial-gradient(circle at 40% 38%, #9BE070, #7CCB55 60%, #65BE44)",
-          width: "clamp(320px, 35vw, 520px)",
-          left: "54%",
-          top: "38%",
-          transform: "translate(-50%, -50%)",
-          opacity: 0.55,
-          boxShadow:
-            "0 0 120px 40px rgba(255, 255, 255, 0.12), 0 0 80px 20px rgba(206, 241, 123, 0.1)",
+          width: "clamp(280px, 70vw, 1300px)",
+          right: "-10%",
+          top: "45%",
+          transform: "translateY(-50%)",
         }}
       />
 
-      {/* ─── "Pickleball!" Bottom Text ─── */}
+      {/* ─── "BounceBack" Bottom Text ─── */}
       <div className="animate-slide-in-bottom pointer-events-none absolute bottom-[5%] left-0 z-10 w-full">
         <p
           className="select-none text-center font-black leading-none text-white"
           style={{
-            fontSize: "clamp(6rem, 14vw, 16rem)",
+            fontSize: "clamp(3.5rem, 14vw, 16rem)",
             letterSpacing: "-0.02em",
           }}
         >
-          Pickleball!
+          BounceBack
         </p>
       </div>
 
       {/* ─── Right Social Bar ─── */}
-      <div className="animate-social-fade pointer-events-auto absolute top-[calc(50%+10px)] right-8 z-40 hidden -translate-y-1/2 flex-col items-center gap-0 lg:flex xl:right-10">
+      <div className="animate-social-fade pointer-events-auto absolute top-[calc(50%+90px)] right-8 z-40 hidden -translate-y-1/2 flex-col items-center gap-0 lg:flex xl:right-10">
         <div className="mb-3 h-10 w-[1px] bg-bb-mid/50" />
 
         <a
@@ -153,19 +316,19 @@ export default function HeroSection() {
         <div className="h-6 w-[1px] bg-bb-mid/50" />
 
         <a
-          href="https://www.youtube.com/@BounceBackPickle"
+          href="https://www.linkedin.com/company/bounceback-pickle/?viewAsMember=true"
           target="_blank"
           rel="noopener noreferrer"
-          aria-label="YouTube"
+          aria-label="LinkedIn"
           className="flex h-[52px] w-[52px] items-center justify-center rounded-full border-[1.5px] border-bb-mid text-bb-mid transition-colors duration-200 hover:border-bb-mid hover:bg-bb-mid/15"
         >
           <svg
-            width="20"
-            height="16"
-            viewBox="0 0 20 14"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
             fill="currentColor"
           >
-            <path d="M19.6 2.2c-.2-.8-.9-1.5-1.7-1.7C16.3 0 10 0 10 0S3.7 0 2.1.5c-.8.2-1.5.9-1.7 1.7C0 3.8 0 7 0 7s0 3.2.4 4.8c.2.8.9 1.5 1.7 1.7C3.7 14 10 14 10 14s6.3 0 7.9-.5c.8-.2 1.5-.9 1.7-1.7C20 10.2 20 7 20 7s0-3.2-.4-4.8zM8 10V4l5.2 3L8 10z" />
+            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
           </svg>
         </a>
 
