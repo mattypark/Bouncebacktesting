@@ -17,7 +17,7 @@ export default function Home() {
       {/* Storytelling slides */}
       <TextRevealSection
         id="slide-problem"
-        text="There's a major problem in the Pickleball + Environmental community."
+        text="There's a major problem in the Pickleball community."
       />
       <WasteStatSection />
       <TextRevealSection

@@ -5,20 +5,20 @@ import { useEffect, useRef, useState } from "react";
 const STEPS = [
   {
     number: "1",
-    title: "Cracked",
-    body: "Every pickleball cracks. It\u2019s a feature of the sport, but cracking means waste that adds up fast.",
-    video: "/process1.mp4",
+    title: "Collect",
+    body: "Cracked pickleballs are collected in BounceBack bins before they ever reach a landfill.",
+    video: "/processssss.mp4",
   },
   {
     number: "2",
     title: "Grind",
-    body: "Collected and broken down into raw recycled material through our patented process.",
+    body: "Collected balls are broken down into raw material.",
     video: "/process2.mp4",
   },
   {
     number: "3",
     title: "Remold",
-    body: "We remold recycled material into the ball you love, keeping the same feel and performance.",
+    body: "That material is remolded into new pickleballs, retaining the same feel & same bounce.",
     video: "/process3.mp4",
   },
 ];

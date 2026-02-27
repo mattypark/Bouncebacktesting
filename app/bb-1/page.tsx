@@ -2,17 +2,15 @@
 
 import { useState, useRef, useEffect } from "react";
 import NavBar from "@/components/NavBar";
-import { useCart } from "@/components/CartContext";
+
 
 const videos = [
-  "/videos/bb1-clip-1.mov",
   "/videos/bb1-clip-2.mov",
   "/videos/bb1-clip-3.mov",
   "/videos/bb1-clip-4.mov",
 ];
 
 export default function BB1ProductPage() {
-  const { addItem } = useCart();
   const [activeVideo, setActiveVideo] = useState(0);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
 
@@ -35,16 +33,6 @@ export default function BB1ProductPage() {
     <div className="min-h-screen bg-bb-cream text-bb-deep">
       <NavBar variant="dark" />
 
-      {/* ─── Breadcrumb ─── */}
-      <div className="px-10 pt-2 pb-4 md:px-12 lg:px-16">
-        <p className="text-sm text-bb-deep/40">
-          <a href="/" className="transition-colors hover:text-bb-deep/60">Home</a>
-          <span className="mx-2">/</span>
-          <a href="/shop" className="transition-colors hover:text-bb-deep/60">Our Products</a>
-          <span className="mx-2">/</span>
-          <span className="text-bb-deep/70">BounceBack BB-1</span>
-        </p>
-      </div>
 
       {/* ─── Hero Section — Big text + product image ─── */}
       <section className="relative flex min-h-[70vh] w-full items-center justify-center overflow-hidden">
@@ -92,26 +80,26 @@ export default function BB1ProductPage() {
         </h2>
 
         <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-bb-deep/60">
-          In its compact, lightweight, and durable body, the BounceBack BB-1
-          delivers everything you need. Built from 100% recycled materials with
-          the same feel, bounce, and performance as professional-grade
-          pickleballs. Approved for competitive play — designed for the planet.
+        Elite performance meets 100% recycled innovation - delivering 
+        consistent bounce, true spin, and long-lasting outdoor play in a
+        precision-engineered designed for players and the planet.
+
         </p>
 
-        <button
-          onClick={() =>
-            addItem({
-              id: "bb1-lime",
-              name: "BounceBack BB-1",
-              variant: "Lime",
-              price: 9.99,
-              image: "/bb1-ball.png",
-            })
-          }
-          className="mt-8 inline-block border-2 border-bb-deep px-10 py-4 text-sm font-semibold tracking-[0.15em] text-bb-deep transition-all duration-300 hover:bg-bb-deep hover:text-bb-cream"
-        >
-          BUY NOW
-        </button>
+        {/* Coming soon badge */}
+        <div className="mt-8 flex flex-col items-center gap-4">
+          <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+            <span className="w-full cursor-not-allowed border-2 border-bb-deep/30 px-10 py-4 text-sm font-semibold tracking-[0.15em] text-bb-deep/30 sm:w-auto text-center">
+              BUY 1 PACK
+            </span>
+            <span className="w-full cursor-not-allowed bg-bb-deep/30 px-10 py-4 text-sm font-semibold tracking-[0.15em] text-bb-cream/50 sm:w-auto text-center">
+              MONTHLY SUBSCRIPTION
+            </span>
+          </div>
+          <p className="text-sm font-medium text-bb-deep/50 tracking-wide">
+            Coming soon — <a href="/request-bin" className="underline underline-offset-2 hover:text-bb-deep transition-colors">join the waitlist</a> to be first in line.
+          </p>
+        </div>
       </section>
 
       {/* ─── See the BB-1 In Action ─── */}
@@ -184,7 +172,7 @@ export default function BB1ProductPage() {
             <h3 className="text-lg font-bold text-bb-deep">100% Recycled</h3>
             <p className="mt-2 text-sm leading-relaxed text-bb-deep/50">
               Made entirely from recycled plastic waste collected through our
-              community bin program.
+              recycling service.
             </p>
           </div>
           <div className="border-t border-bb-deep/10 pt-6">
@@ -197,7 +185,7 @@ export default function BB1ProductPage() {
           <div className="border-t border-bb-deep/10 pt-6">
             <h3 className="text-lg font-bold text-bb-deep">40-Hole Design</h3>
             <p className="mt-2 text-sm leading-relaxed text-bb-deep/50">
-              Precision-drilled outdoor pattern for consistent flight and
+              Precision-drilled pattern for consistent flight and
               optimal wind resistance.
             </p>
           </div>

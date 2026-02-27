@@ -1,45 +1,24 @@
 export default function WhyChooseSection() {
   return (
-    <section className="w-full bg-bb-cream py-24 md:py-32">
+    <section className="w-full bg-bb-cream py-24 pb-36 md:py-32 md:pb-100">
       <div className="mx-auto max-w-7xl px-6 md:px-10">
         {/* Heading */}
-        <h2 className="text-center text-3xl font-bold text-black md:text-4xl lg:text-5xl">
-          Why choose Bounce Back?
+        <h2 className="mb-16 text-center text-3xl font-bold text-black md:text-4xl lg:text-5xl">
+          Why choose <span className="text-bb-deep">BounceBack</span>?
         </h2>
-        <p className="mx-auto mb-16 mt-4 max-w-[580px] text-center text-base text-black/70 md:text-lg">
-          BounceBack is the most advanced recycled pickleball.
-        </p>
 
         {/* Feature cards */}
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           {/* Card 1 — Efficient recycling */}
           <div className="rounded-xl border-2 border-bb-lime bg-white p-8">
             <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-lg bg-bb-mint">
-              <svg
-                width="28"
-                height="28"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="text-black"
-              >
-                <path d="M7.5 7.5c.7-1.5 2.2-2.5 4-2.5a4.5 4.5 0 0 1 3.8 2.1" />
-                <path d="M16.5 7l-1.2.2.2-1.2" />
-                <path d="M16.5 16.5c-.7 1.5-2.2 2.5-4 2.5a4.5 4.5 0 0 1-3.8-2.1" />
-                <path d="M7.5 17l1.2-.2-.2 1.2" />
-                <path d="M5 12H3" />
-                <path d="M21 12h-2" />
-                <circle cx="12" cy="12" r="10" />
-              </svg>
+              <img src="/actrecycling.png" alt="Recycling" className="h-7 w-7" />
             </div>
             <p className="mb-2 text-base font-bold text-black md:text-lg">
-              Efficient recycling.
+              Closed Loop Recycling.
             </p>
             <p className="text-sm leading-relaxed text-black/60 md:text-base">
-              We use efficient materials and manufacturers in order to save the environment as much as we can.
+              We&apos;re recycling old and cracked pickleballs to fully close the loop and give balls a second life to save the environment in the sport we love.
             </p>
           </div>
 
@@ -49,23 +28,40 @@ export default function WhyChooseSection() {
               <span className="text-2xl font-bold text-black">=</span>
             </div>
             <p className="mb-2 text-base font-bold text-black md:text-lg">
-              1-1 Same feel with pro Pickleballs.
+              1-1 Same feel with Pro Pickleballs.
             </p>
             <p className="text-sm leading-relaxed text-black/60 md:text-base">
-              The way we manufactured the gives us the desired feel when buying a professional pickleball.
+              Our recycling and remanufacturing process is designed to replicate the same experience as a professional pickleball.
             </p>
           </div>
 
           {/* Card 3 — Cost Effective */}
           <div className="rounded-xl border-2 border-bb-lime bg-white p-8">
             <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-lg bg-bb-mint">
-              <span className="text-2xl font-bold text-black">$</span>
+              <svg
+                width="28"
+                height="28"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="text-black"
+              >
+                <path d="m11 17 2 2a1 1 0 1 0 3-3" />
+                <path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4" />
+                <path d="m21 3 1 11h-2" />
+                <path d="M3 3 2 14h2" />
+                <path d="m3 4 2.71.71a2 2 0 0 0 1.42-.25l.47-.28a5.79 5.79 0 0 1 4.4-.69" />
+                <path d="m6 16 2 2a1 1 0 1 0 3-3" />
+              </svg>
             </div>
             <p className="mb-2 text-base font-bold text-black md:text-lg">
-              Cost Effective.
+              Trusted by the community.
             </p>
             <p className="text-sm leading-relaxed text-black/60 md:text-base">
-              We are 1.5x cheaper than all the pickle balls you see in the market.
+              Our transparent process allows you to watch the steps we've taken to get here as well as see our future plans for the movement.
             </p>
           </div>
         </div>

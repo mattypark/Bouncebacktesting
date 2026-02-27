@@ -6,10 +6,9 @@ import CartIcon from "./CartIcon";
 
 const menuLinks = [
   { name: "Home", href: "/" },
-  { name: "Shop", href: "/shop" },
-  { name: "About", href: "/about" },
   { name: "Buy Balls", href: "/bb-1" },
-  { name: "Request a Bin", href: "/request-bin" },
+  { name: "Order a Bin", href: "/request-bin" },
+  { name: "About", href: "/about" },
   { name: "Account", href: "/account" },
 ];
 
@@ -171,7 +170,7 @@ export default function NavBar({
                 }}
               >
                 <a
-                  href="/shop"
+                  href="/request-bin"
                   onClick={() => setIsMenuOpen(false)}
                   className="group relative text-sm font-semibold tracking-[0.15em] text-bb-lime/80 transition-colors duration-300 hover:text-bb-lime"
                 >

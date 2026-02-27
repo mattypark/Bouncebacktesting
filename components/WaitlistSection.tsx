@@ -85,8 +85,7 @@ export default function WaitlistSection() {
         </h2>
 
         <p className="mx-auto mt-5 max-w-md text-sm leading-relaxed text-black/50 md:mt-6 md:text-base lg:text-lg">
-          We&apos;re changing the environment. Join the waitlist to get a
-          recycled pickleball in your hands.
+          We&apos;re changing the environment. Join the waitlist be the first to hear about BounceBack's next steps.
         </p>
 
         {/* Email input bar */}
