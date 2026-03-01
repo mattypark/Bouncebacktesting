@@ -97,7 +97,7 @@ export default function BB1ProductPage() {
             </span>
           </div>
           <p className="text-sm font-medium text-bb-deep/50 tracking-wide">
-            Coming soon — <a href="/request-bin" className="underline underline-offset-2 hover:text-bb-deep transition-colors">join the waitlist</a> to be first in line.
+            Coming soon — <a href="/#waitlist" className="underline underline-offset-2 hover:text-bb-deep transition-colors">join the waitlist</a> to be first in line.
           </p>
         </div>
       </section>

@@ -65,7 +65,7 @@ export default function WaitlistSection() {
   }, []);
 
   return (
-    <section className="relative w-full overflow-hidden bg-bb-cream pt-32 pb-64 md:pt-48 md:pb-80 lg:pt-64 lg:pb-[32rem]">
+    <section id="waitlist" className="relative w-full overflow-hidden bg-bb-cream pt-32 pb-64 md:pt-48 md:pb-80 lg:pt-64 lg:pb-[32rem]">
       {/* ── Floating decorative lime circles ── */}
       {balls.map((b) => (
         <div
