@@ -52,6 +52,10 @@ export default function RequestBinPage() {
     organization: "",
     message: "",
   });
+  const [joinWaitlist, setJoinWaitlist] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (styleRef.current) return;
@@ -71,10 +75,23 @@ export default function RequestBinPage() {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.SyntheticEvent) {
     e.preventDefault();
-    // TODO: connect to backend / form service
-    alert("Request submitted! We'll be in touch soon.");
+    setLoading(true);
+    setError("");
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/contact`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...formData, joinWaitlist }),
+      });
+      if (!res.ok) throw new Error("Something went wrong.");
+      setSubmitted(true);
+    } catch {
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -98,88 +115,120 @@ export default function RequestBinPage() {
         {/* Content */}
         <div className="relative z-10 mx-auto max-w-3xl px-6 text-center">
           <h1 className="text-4xl font-bold tracking-tight text-black md:text-5xl lg:text-[64px] lg:leading-[1.1]">
-            
-Order a BounceBack Bin For Your Facility
-
+            Order a BounceBack Bin For Your Facility
           </h1>
 
           <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-black/50 md:mt-10 md:text-base lg:text-lg">Fill out this information to hear the next steps in ordering your <span className="font-bold">BounceBack Recycling Bin</span> and learn about earning your <span className="font-bold">Sustainable Facility Accreditation</span></p>
 
-          {/* ─── Form ─── */}
-          <form
-            onSubmit={handleSubmit}
-            className="mx-auto mt-10 max-w-[560px] space-y-5 text-left md:mt-14"
-          >
-            {/* Name */}
-            <div className="relative">
-              <span className="absolute -top-3 left-4 z-10 bg-bb-cream px-1.5 text-xs font-medium text-bb-mid">
-                Full Name
-              </span>
-              <input
-                type="text"
-                name="name"
-                required
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="Your full name"
-                className="w-full rounded-xl bg-bb-deep px-6 py-4 text-sm text-white outline-none placeholder:text-white/30 md:py-5 md:text-base"
-              />
+          {submitted ? (
+            /* ─── Success State ─── */
+            <div className="mx-auto mt-14 max-w-[560px] rounded-2xl bg-bb-deep px-8 py-12 text-center">
+              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-bb-lime">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#084734" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              </div>
+              <h2 className="text-2xl font-bold text-white">Check your email!</h2>
+              <p className="mt-3 text-sm leading-relaxed text-white/60">
+                We sent next steps to <span className="font-semibold text-white">{formData.email}</span>. Check your inbox (and spam just in case).
+              </p>
             </div>
-
-            {/* Email */}
-            <div className="relative">
-              <span className="absolute -top-3 left-4 z-10 bg-bb-cream px-1.5 text-xs font-medium text-bb-mid">
-                Email Address
-              </span>
-              <input
-                type="email"
-                name="email"
-                required
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="your@email.com"
-                className="w-full rounded-xl bg-bb-deep px-6 py-4 text-sm text-white outline-none placeholder:text-white/30 md:py-5 md:text-base"
-              />
-            </div>
-
-            {/* Organization */}
-            <div className="relative">
-              <span className="absolute -top-3 left-4 z-10 bg-bb-cream px-1.5 text-xs font-medium text-bb-mid">
-                Organization / Club
-              </span>
-              <input
-                type="text"
-                name="organization"
-                value={formData.organization}
-                onChange={handleChange}
-                placeholder="Club name, facility, or organization"
-                className="w-full rounded-xl bg-bb-deep px-6 py-4 text-sm text-white outline-none placeholder:text-white/30 md:py-5 md:text-base"
-              />
-            </div>
-
-            {/* Message */}
-            <div className="relative">
-              <span className="absolute -top-3 left-4 z-10 bg-bb-cream px-1.5 text-xs font-medium text-bb-mid">
-                Message (optional)
-              </span>
-              <textarea
-                name="message"
-                rows={4}
-                value={formData.message}
-                onChange={handleChange}
-                placeholder="Leave a message for us..."
-                className="w-full resize-none rounded-xl bg-bb-deep px-6 py-4 text-sm text-white outline-none placeholder:text-white/30 md:py-5 md:text-base"
-              />
-            </div>
-
-            {/* Submit */}
-            <button
-              type="submit"
-              className="w-full rounded-xl bg-bb-lime px-10 py-4 text-sm font-semibold text-bb-deep transition-colors hover:bg-bb-mint md:py-5 md:text-base"
+          ) : (
+            /* ─── Form ─── */
+            <form
+              onSubmit={handleSubmit}
+              className="mx-auto mt-10 max-w-[560px] space-y-5 text-left md:mt-14"
             >
-              Recieve Next Steps
-            </button>
-          </form>
+              {/* Name */}
+              <div className="relative">
+                <span className="absolute -top-3 left-4 z-10 bg-bb-cream px-1.5 text-xs font-medium text-bb-mid">
+                  Full Name
+                </span>
+                <input
+                  type="text"
+                  name="name"
+                  required
+                  value={formData.name}
+                  onChange={handleChange}
+                  placeholder="Your full name"
+                  className="w-full rounded-xl bg-bb-deep px-6 py-4 text-sm text-white outline-none placeholder:text-white/30 md:py-5 md:text-base"
+                />
+              </div>
+
+              {/* Email */}
+              <div className="relative">
+                <span className="absolute -top-3 left-4 z-10 bg-bb-cream px-1.5 text-xs font-medium text-bb-mid">
+                  Email Address
+                </span>
+                <input
+                  type="email"
+                  name="email"
+                  required
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="your@email.com"
+                  className="w-full rounded-xl bg-bb-deep px-6 py-4 text-sm text-white outline-none placeholder:text-white/30 md:py-5 md:text-base"
+                />
+              </div>
+
+              {/* Organization */}
+              <div className="relative">
+                <span className="absolute -top-3 left-4 z-10 bg-bb-cream px-1.5 text-xs font-medium text-bb-mid">
+                  Organization / Club
+                </span>
+                <input
+                  type="text"
+                  name="organization"
+                  value={formData.organization}
+                  onChange={handleChange}
+                  placeholder="Club name, facility, or organization"
+                  className="w-full rounded-xl bg-bb-deep px-6 py-4 text-sm text-white outline-none placeholder:text-white/30 md:py-5 md:text-base"
+                />
+              </div>
+
+              {/* Message */}
+              <div className="relative">
+                <span className="absolute -top-3 left-4 z-10 bg-bb-cream px-1.5 text-xs font-medium text-bb-mid">
+                  Message (optional)
+                </span>
+                <textarea
+                  name="message"
+                  rows={4}
+                  value={formData.message}
+                  onChange={handleChange}
+                  placeholder="Leave a message for us..."
+                  className="w-full resize-none rounded-xl bg-bb-deep px-6 py-4 text-sm text-white outline-none placeholder:text-white/30 md:py-5 md:text-base"
+                />
+              </div>
+
+              {/* Waitlist opt-in */}
+              <label className="flex cursor-pointer items-start gap-3 rounded-xl border-2 border-bb-deep/10 px-4 py-3.5 transition-colors hover:border-bb-deep/30 has-[:checked]:border-bb-lime has-[:checked]:bg-bb-lime/10">
+                <input
+                  type="checkbox"
+                  checked={joinWaitlist}
+                  onChange={(e) => setJoinWaitlist(e.target.checked)}
+                  className="mt-0.5 h-4 w-4 shrink-0 accent-bb-deep"
+                />
+                <div>
+                  <p className="text-sm font-semibold text-bb-deep">Keep me in the loop</p>
+                  <p className="mt-0.5 text-xs leading-relaxed text-bb-deep/50">Get updates on new launches, sustainability news, and exclusive BounceBack offers.</p>
+                </div>
+              </label>
+
+              {error && (
+                <p className="text-sm text-red-500">{error}</p>
+              )}
+
+              {/* Submit */}
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full rounded-xl bg-bb-lime px-10 py-4 text-sm font-semibold text-bb-deep transition-colors hover:bg-bb-mint disabled:opacity-50 disabled:cursor-not-allowed md:py-5 md:text-base"
+              >
+                {loading ? "Sending..." : "Receive Next Steps"}
+              </button>
+            </form>
+          )}
         </div>
       </section>
 

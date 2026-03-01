@@ -8,7 +8,6 @@ const menuLinks = [
   { name: "Home", href: "/" },
   { name: "Buy Balls", href: "/bb-1" },
   { name: "Order a Bin", href: "/request-bin" },
-  { name: "About", href: "/about" },
   { name: "Account", href: "/account" },
 ];
 
@@ -359,7 +358,7 @@ export default function HeroSection() {
         <div className="mb-3 h-10 w-[1px] bg-bb-mid/50" />
 
         <a
-          href="https://www.instagram.com/bounceback.pickle"
+          href="https://www.instagram.com/bouncebackpickle/"
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Instagram"
