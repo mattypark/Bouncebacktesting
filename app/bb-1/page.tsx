@@ -38,9 +38,9 @@ export default function BB1ProductPage() {
       <section className="relative flex min-h-[70vh] w-full items-center justify-center overflow-hidden">
         {/* Large background text */}
         <h1
-          className="pointer-events-none absolute select-none font-black leading-none text-bb-deep/[0.06]"
+          className="pointer-events-none absolute select-none font-black leading-none text-bb-deep/[0.06] whitespace-nowrap"
           style={{
-            fontSize: "clamp(18rem, 38vw, 52rem)",
+            fontSize: "clamp(6rem, 38vw, 52rem)",
             letterSpacing: "-0.04em",
           }}
         >
