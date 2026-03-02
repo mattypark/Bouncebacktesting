@@ -7,7 +7,7 @@ export async function POST(req: Request) {
 
   // 1. Notify Dillon with the submission details
   const { error: notifyError } = await resend.emails.send({
-    from: "BounceBack Form <onboarding@resend.dev>",
+    from: "BounceBack Form <noreply@bouncebackpickle.com>",
     to: "Bouncebackpickle@gmail.com",
     subject: `New Bin Request from ${name}`,
     text: `New bin request submitted:
@@ -25,7 +25,7 @@ Message: ${message || "None"}`,
 
   // 2. Send confirmation email to the person who submitted
   const { error: confirmError } = await resend.emails.send({
-    from: "Dillon @ BounceBack <onboarding@resend.dev>",
+    from: "Dillon @ BounceBack <noreply@bouncebackpickle.com>",
     to: email,
     subject: "Welcome to BounceBack ♻️",
     text: `Hi ${name}!
