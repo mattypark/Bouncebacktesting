@@ -7,7 +7,7 @@ export async function POST(req: Request) {
 
   // 1. Notify Dillon with the submission details
   const { error: notifyError } = await resend.emails.send({
-    from: "BounceBack Form <noreply@bouncebackpickle.com>",
+    from: "BounceBack Form <recycle@bouncebackpickle.com>",
     to: "Bouncebackpickle@gmail.com",
     subject: `New Bin Request from ${name}`,
     text: `New bin request submitted:
@@ -25,7 +25,7 @@ Message: ${message || "None"}`,
 
   // 2. Send confirmation email to the person who submitted
   const { error: confirmError } = await resend.emails.send({
-    from: "Dillon @ BounceBack <noreply@bouncebackpickle.com>",
+    from: "Dillon @ BounceBack <recycle@bouncebackpickle.com>",
     to: email,
     subject: "Welcome to BounceBack ♻️",
     text: `Hi ${name}!
@@ -36,7 +36,7 @@ We're excited to get you involved with our Sustainable Facility Accreditation, a
 
 http://tinyurl.com/BounceBackRecycle
 
-To begin recycling with BounceBack and join as an accredited facility, simply complete the form, and we will take care of getting your recycling bin shipped, along with everything that comes included in your membership. If any questions come up, feel free to reply here - we are happy to help.
+To begin recycling with BounceBack and join as an accredited facility, simply complete the form, and we will take care of getting your recycling bin shipped, along with everything that comes included in your membership. If you have any questions or want to get in touch, feel free to contact us at recycle@bouncebackpickle.com - we are happy to help.
 
 We look forward to partnering with you, bringing BounceBack to your location, and empowering your players to help give every cracked ball a second life.
 
