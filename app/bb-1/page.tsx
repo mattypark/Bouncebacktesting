@@ -38,7 +38,7 @@ export default function BB1ProductPage() {
       <section className="relative flex min-h-[70vh] w-full items-center justify-center overflow-hidden">
         {/* Large background text */}
         <h1
-          className="pointer-events-none absolute select-none font-black leading-none text-bb-deep/[0.06] whitespace-nowrap"
+          className="pointer-events-none absolute select-none font-black leading-none text-bb-deep/[0.07] whitespace-nowrap"
           style={{
             fontSize: "clamp(6rem, 38vw, 52rem)",
             letterSpacing: "-0.04em",
@@ -53,21 +53,21 @@ export default function BB1ProductPage() {
           <img
             src="/bb1-ball.png"
             alt="BounceBack BB-1"
-            className="w-[280px] -mr-[160px] mb-0 drop-shadow-xl md:w-[380px] md:-mr-[215px] lg:w-[460px] lg:-mr-[340px]"
+            className="w-[140px] -mr-[80px] mb-0 drop-shadow-xl md:w-[380px] md:-mr-[215px] lg:w-[460px] lg:-mr-[340px]"
             style={{ transform: "translateY(15%)" }}
           />
           {/* Center ball — front, top */}
           <img
             src="/bb1-ball.png"
             alt="BounceBack BB-1"
-            className="relative z-10 w-[320px] drop-shadow-2xl md:w-[440px] lg:w-[530px]"
+            className="relative z-10 w-[160px] drop-shadow-2xl md:w-[440px] lg:w-[530px]"
             style={{ transform: "translateY(-8%)" }}
           />
           {/* Right ball — behind, lower-right */}
           <img
             src="/bb1-ball.png"
             alt="BounceBack BB-1"
-            className="w-[280px] -ml-[160px] mb-0 drop-shadow-xl md:w-[380px] md:-ml-[215px] lg:w-[460px] lg:-ml-[340px]"
+            className="w-[140px] -ml-[80px] mb-0 drop-shadow-xl md:w-[380px] md:-ml-[215px] lg:w-[460px] lg:-ml-[340px]"
             style={{ transform: "translateY(15%)" }}
           />
         </div>
