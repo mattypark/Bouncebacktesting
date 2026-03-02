@@ -69,7 +69,7 @@ export default function RecycledRevealSection() {
     >
       {/* Headline — single line, word-by-word scroll reveal */}
       <div className="mx-auto mb-16 px-8 md:mb-20 md:px-14 lg:px-20">
-        <p className="whitespace-nowrap text-center text-3xl font-bold text-bb-deep md:text-5xl lg:text-6xl">
+        <p className="md:whitespace-nowrap text-center text-3xl font-bold text-bb-deep md:text-5xl lg:text-6xl">
           {headlineWords.map((word, i) => (
             <span
               key={i}

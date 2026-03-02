@@ -95,17 +95,18 @@ export default function WasteStatSection() {
       className="relative flex min-h-screen w-full items-center bg-bb-lime"
     >
       {/* ─── Content ─── */}
-      <div className="w-full px-8 md:px-14 lg:px-20">
-        {/* Label */}
-        <p className="text-xl font-bold text-bb-deep md:text-2xl lg:text-3xl">
-          Pickleball Creates
-        </p>
+      <div className="w-full flex flex-col items-center px-4">
+        {/* Inner block — sized to the number, label + subtitle aligned to its edges */}
+        <div className="inline-flex flex-col items-stretch">
+          {/* Label — left-aligned to number */}
+          <p className="text-xl font-bold text-bb-deep md:text-2xl lg:text-3xl">
+            Pickleball Creates
+          </p>
 
-        {/* Stat Number + Subtitle */}
-        <div className="relative inline-block">
+          {/* Stat Number */}
           <h2
-            className="font-bold leading-none tracking-tight text-bb-deep md:whitespace-nowrap"
-            style={{ fontSize: "clamp(3.5rem, 22vw, 22rem)", marginLeft: "-1px" }}
+            className="font-bold leading-none tracking-tight text-bb-deep whitespace-nowrap"
+            style={{ fontSize: "clamp(2rem, 13.5vw, 22rem)" }}
             aria-label={TARGET.toLocaleString("en-US")}
           >
             {parts.map((part, i) => {
@@ -113,7 +114,6 @@ export default function WasteStatSection() {
                 return <CommaChar key={`c-${i}`} />;
               }
               const idx = digitIndex++;
-              // Stagger: leftmost digits animate last
               const delay = (digitCount - 1 - idx) * 0.07;
               return (
                 <DigitColumn
@@ -126,7 +126,8 @@ export default function WasteStatSection() {
             })}
           </h2>
 
-          <p className="mt-2 text-left text-sm font-normal text-bb-deep md:text-right md:text-base lg:absolute lg:right-0 lg:bottom-0 lg:mt-0 lg:text-lg">
+          {/* Subtitle — right-aligned to number */}
+          <p className="mt-1 text-right text-sm font-normal text-bb-deep md:text-base lg:text-lg">
             pounds of plastic waste every year.
           </p>
         </div>
