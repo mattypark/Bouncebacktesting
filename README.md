@@ -1,37 +1,112 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# BounceBack — Recycled Pickleball
+
+The official website for [BounceBack](https://bouncebackpickle.com), the first recycled pickleball built with the same feel and performance as professional balls. Built with Next.js 16, Framer Motion, and Tailwind CSS v4.
+
+![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwindcss&logoColor=white)
+
+## Features
+
+- **Scroll-Driven Storytelling** — Problem/solution narrative with animated text reveals and stat counters
+- **Video Sections** — Embedded process videos showing how balls are recycled
+- **Smooth Scrolling** — Lenis-powered scroll experience
+- **Contact Form** — Bin request form with email notifications via Resend
+- **User Accounts** — Registration and login backed by Supabase Auth
+- **Product Page** — BB-1 ball showcase with cart functionality
+- **Fully Responsive** — Mobile-first design across all breakpoints
+- **Analytics** — Vercel Analytics integration
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Framework | Next.js 16 (App Router) |
+| Language | TypeScript |
+| Styling | Tailwind CSS v4 |
+| Animation | Framer Motion |
+| Smooth Scroll | Lenis |
+| Auth & Database | Supabase |
+| Email | Resend |
+| Hosting | Vercel |
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+
+- npm or pnpm
+
+### Setup
 
 ```bash
+# Install dependencies
+npm install
+
+# Create a .env.local file with your credentials:
+# NEXT_PUBLIC_SUPABASE_URL=
+# NEXT_PUBLIC_SUPABASE_ANON_KEY=
+# NEXT_PUBLIC_BACKEND_URL=
+# RESEND_API_KEY=
+
+# Start dev server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the site.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Production Build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm run start
+```
 
-## Learn More
+## Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+app/
+  layout.tsx                # Root layout, fonts, providers
+  page.tsx                  # Home — storytelling sections
+  globals.css               # Global styles
+  account/page.tsx          # Login / registration
+  bb-1/page.tsx             # BB-1 product page
+  request-bin/page.tsx      # Bin request page
+  api/
+    auth/                   # Auth routes (login, register, logout, callback)
+    contact/route.ts        # Contact form → Resend emails
+components/
+  HeroSection.tsx           # Hero with video background
+  TextRevealSection.tsx     # Scroll-triggered text reveal
+  WasteStatSection.tsx      # Animated waste statistics
+  RecycledRevealSection.tsx # Product reveal animation
+  TheProcessSection.tsx     # Recycling process with video
+  WhyChooseSection.tsx      # Value propositions
+  TestimonialsSection.tsx   # Customer testimonials
+  WaitlistSection.tsx       # Waitlist / contact CTA
+  FounderSection.tsx        # Founder story
+  NavBar.tsx                # Navigation bar
+  CartContext.tsx            # Cart state provider
+  CartDrawer.tsx            # Slide-out cart drawer
+  CartIcon.tsx              # Cart icon with badge
+  SmoothScroll.tsx          # Lenis scroll provider
+  Providers.tsx             # App-level providers
+lib/
+  supabase.ts               # Supabase client
+public/
+  videos/                   # Product clips
+  *.mp4, *.mov              # Process and reveal videos
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Environment Variables
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Variable | Description |
+|----------|-------------|
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anonymous key |
+| `NEXT_PUBLIC_BACKEND_URL` | Backend API URL |
+| `RESEND_API_KEY` | Resend API key (server-only) |
 
-## Deploy on Vercel
+## License
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# bouncebackswebsiteee
+MIT
