@@ -103,7 +103,7 @@ export default function AccountPage() {
       return;
     }
 
-    setUser(data.user);
+    setUser(data.user ?? null);
   }
 
   async function handleLogout() {
