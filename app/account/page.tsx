@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import NavBar from "@/components/NavBar";
 
@@ -14,6 +14,14 @@ type User = {
 };
 
 export default function AccountPage() {
+  return (
+    <Suspense>
+      <AccountContent />
+    </Suspense>
+  );
+}
+
+function AccountContent() {
   const [tab, setTab] = useState<Tab>("login");
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
