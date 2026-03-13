@@ -1,9 +1,23 @@
 import { Resend } from "resend";
 import { NextResponse } from "next/server";
+import { createClient } from "@supabase/supabase-js";
 
 export async function POST(req: Request) {
   const resend = new Resend(process.env.RESEND_API_KEY);
-  const { name, email, organization, message } = await req.json();
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
+  const { name, email, phone, organization, message } = await req.json();
+
+  // Store bin request in Supabase
+  const { error: dbError } = await supabase
+    .from("bin_requests")
+    .insert({ name, email, phone: phone || null, organization: organization || null, message: message || null });
+
+  if (dbError) {
+    console.error("Supabase insert error:", dbError);
+  }
 
   // 1. Notify Dillon with the submission details
   const { error: notifyError } = await resend.emails.send({
@@ -14,6 +28,7 @@ export async function POST(req: Request) {
 
 Name: ${name}
 Email: ${email}
+Phone: ${phone || "Not provided"}
 Organization: ${organization || "Not provided"}
 Message: ${message || "None"}`,
   });

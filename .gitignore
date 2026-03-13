@@ -38,6 +38,10 @@ Screenshot*.png
 Screen Recording*.mov
 ChatGPT Image*
 
+# large video files
+public/videos/
+public/recycled-reveal.mp4
+
 # debug
 npm-debug.log*
 yarn-debug.log*

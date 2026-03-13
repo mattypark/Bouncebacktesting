@@ -6,6 +6,7 @@ import CartIcon from "./CartIcon";
 
 const menuLinks = [
   { name: "Home", href: "/" },
+  { name: "About", href: "/about" },
   { name: "Buy Balls", href: "/bb-1" },
   { name: "Order a Bin", href: "/request-bin" },
   { name: "Account", href: "/account" },
@@ -321,37 +322,6 @@ export default function HeroSection() {
           transform: "translate(-50%, -50%)",
         }}
       />
-
-      {/* ─── "BounceBack" Bottom Text ─── */}
-      <div
-        className="animate-slide-in-bottom pointer-events-none absolute z-10"
-        style={{
-          left: "clamp(20px, 5vw, 40px)",
-          bottom: "clamp(16px, 3vh, 40px)",
-        }}
-      >
-        <p
-          className="select-none font-black uppercase leading-none text-white md:hidden"
-          style={{
-            fontSize: "clamp(3rem, 13vw, 7rem)",
-            letterSpacing: "-0.02em",
-          }}
-        >
-          BounceBack
-        </p>
-      </div>
-      {/* Desktop bottom text — centered, full width */}
-      <div className="animate-slide-in-bottom pointer-events-none absolute bottom-[5%] left-0 z-10 hidden w-full md:block">
-        <p
-          className="select-none text-center font-black leading-none text-white"
-          style={{
-            fontSize: "clamp(6rem, 14vw, 16rem)",
-            letterSpacing: "-0.02em",
-          }}
-        >
-          BounceBack
-        </p>
-      </div>
 
       {/* ─── Right Social Bar — desktop only ─── */}
       <div className="animate-social-fade pointer-events-auto absolute top-[calc(50%+90px)] right-8 z-40 hidden -translate-y-1/2 flex-col items-center gap-0 lg:flex xl:right-10">

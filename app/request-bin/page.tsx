@@ -49,6 +49,7 @@ export default function RequestBinPage() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    phone: "",
     organization: "",
     message: "",
   });
@@ -167,6 +168,22 @@ export default function RequestBinPage() {
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="your@email.com"
+                  className="w-full rounded-xl bg-bb-deep px-6 py-4 text-sm text-white outline-none placeholder:text-white/30 md:py-5 md:text-base"
+                />
+              </div>
+
+              {/* Phone */}
+              <div className="relative">
+                <span className="absolute -top-3 left-4 z-10 bg-bb-cream px-1.5 text-xs font-medium text-bb-mid">
+                  Phone Number
+                </span>
+                <input
+                  type="tel"
+                  name="phone"
+                  required
+                  value={formData.phone}
+                  onChange={handleChange}
+                  placeholder="(555) 123-4567"
                   className="w-full rounded-xl bg-bb-deep px-6 py-4 text-sm text-white outline-none placeholder:text-white/30 md:py-5 md:text-base"
                 />
               </div>
