@@ -234,7 +234,8 @@ export default function HeroSection() {
         className="animate-fade-in-up-delayed-1 absolute z-30 md:hidden"
         style={{
           left: "clamp(20px, 5vw, 40px)",
-          bottom: "clamp(110px, 15vh, 180px)",
+          top: "50%",
+          transform: "translateY(-50%)",
           maxWidth: "min(520px, 75vw)",
         }}
       >
@@ -269,7 +270,7 @@ export default function HeroSection() {
       {/* ═══════════════════════════════════════════
           DESKTOP LAYOUT (>= md): original absolute overlay
           ═══════════════════════════════════════════ */}
-      <div className="absolute top-[16%] left-[6%] z-30 hidden md:block lg:left-[5%]">
+      <div className="absolute top-1/2 -translate-y-1/2 left-[6%] z-30 hidden md:block lg:left-[5%]">
         {/* BB-1 Label */}
         <div className="animate-fade-in-up flex items-center gap-4">
           <h2 className="text-3xl font-medium text-white lg:text-4xl xl:text-5xl">
@@ -316,10 +317,10 @@ export default function HeroSection() {
         alt="BB-1 Recycled Pickleball"
         className="animate-scale-in pointer-events-none absolute z-20 hidden md:block"
         style={{
-          width: "clamp(550px, 80vw, 1300px)",
-          left: "50%",
-          top: "42%",
-          transform: "translate(-50%, -50%)",
+          width: "clamp(450px, 55vw, 1300px)",
+          right: "-5%",
+          top: "50%",
+          transform: "translateY(-45%)",
         }}
       />
 

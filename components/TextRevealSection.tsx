@@ -66,7 +66,7 @@ function TextRevealSection({
     <section
       ref={sectionRef}
       id={id}
-      className={className || "flex w-full items-center justify-center bg-bb-lime py-48 md:py-64"}
+      className={className || "flex w-full items-center justify-center bg-bb-lime py-24 md:py-32"}
     >
       <div className="mx-auto max-w-4xl px-8 md:px-14 lg:px-20">
         <p className="text-center text-3xl font-bold leading-snug text-bb-deep md:text-4xl lg:text-5xl">

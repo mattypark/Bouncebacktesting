@@ -92,7 +92,7 @@ export default function WasteStatSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative flex min-h-screen w-full items-center bg-bb-lime"
+      className="relative flex w-full items-center bg-bb-lime py-24 md:py-32"
     >
       {/* ─── Content ─── */}
       <div className="w-full flex flex-col items-center px-4">

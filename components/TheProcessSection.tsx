@@ -6,7 +6,7 @@ const STEPS = [
   {
     number: "1",
     title: "Collect",
-    body: "Cracked pickleballs are collected in BounceBack bins before they ever reach a landfill.",
+    body: "Cracked pickleballs are collected in BounceBack bins and shipped out for reprocessing before they ever reach a landfill.",
     video: "/processssss.mp4",
   },
   {

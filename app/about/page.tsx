@@ -40,12 +40,12 @@ const values = [
   {
     number: "01",
     title: "Sustainability First",
-    body: "Every ball we make is 100% recycled. We're closing the loop on pickleball waste — turning discarded balls into brand-new ones without sacrificing quality.",
+    body: "Every ball we make is 100% recycled. We built BounceBack on the belief that the industry deserves a real solution to its waste problem, and we're transparent about every step of how we deliver it – from collection to court.",
   },
   {
     number: "02",
     title: "Player-Grade Performance",
-    body: "Recycled doesn't mean compromised. The BB-1 meets the same bounce, weight, and durability specs as the top professional balls on the market.",
+    body: "Recycled doesn't mean compromised. The BB-1 is built to meet the same bounce, weight, and durability standards as the top balls on the market. Sustainability only wins if the product can stand on its own.",
   },
   {
     number: "03",
@@ -130,8 +130,8 @@ export default function AboutPage() {
             transition={{ duration: 0.7, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
             className="mt-8 max-w-xl text-base leading-relaxed text-bb-deep/55 md:text-lg"
           >
-            BounceBack is on a mission to eliminate pickleball waste — one recycled ball at a time.
-            We believe high performance and sustainability aren&apos;t trade-offs. They&apos;re the same thing.
+            BounceBack is on a mission to eliminate pickleball waste. The world&apos;s first closed-loop
+            pickleball recycling company, keeping the sport we love sustainable without a sacrifice in performance.
           </motion.p>
 
           {/* Scroll indicator */}
@@ -215,27 +215,32 @@ export default function AboutPage() {
             <Reveal delay={0.4}>
               <p className="mt-6 max-w-lg text-base leading-relaxed text-bb-cream/60 md:text-lg">
                 As an avid pickleball player, Dillon saw firsthand the staggering amount of
-                plastic waste the sport generates — cracked balls tossed after every session with
-                no path to recycling. That frustration became a mission.
+                plastic waste the sport generates. Cracked balls tossed after every session with
+                no end of life solution.
               </p>
             </Reveal>
 
             <Reveal delay={0.5}>
               <p className="mt-4 max-w-lg text-base leading-relaxed text-bb-cream/60 md:text-lg">
-                BounceBack was born from one simple question:{" "}
+                That concern turned into a question worth solving:{" "}
                 <span className="font-semibold text-bb-lime/90 italic">
                   &quot;What if we could turn every discarded pickleball into a brand-new one?&quot;
-                </span>{" "}
-                With a background in sustainability and an obsession with product quality, Dillon
-                set out to prove that recycled can mean elite.
+                </span>
+              </p>
+            </Reveal>
+
+            <Reveal delay={0.55}>
+              <p className="mt-4 max-w-lg text-base leading-relaxed text-bb-cream/60 md:text-lg">
+                As an entrepreneurship student with a love for startups and an obsession with
+                product quality, Dillon set out to prove that recycled can mean elite.
               </p>
             </Reveal>
 
             <Reveal delay={0.6}>
               <p className="mt-4 max-w-lg text-base leading-relaxed text-bb-cream/60 md:text-lg">
-                Today, BounceBack is building the first closed-loop recycling system for
-                pickleballs — collecting, processing, and remanufacturing balls that play just
-                as well as anything on the market, with zero virgin plastic.
+                Today, BounceBack is actively building the first closed-loop recycling system for
+                pickleballs, collecting, processing, and remanufacturing balls that play just
+                as well as anything on the market, while cleaning up our game.
               </p>
             </Reveal>
           </div>

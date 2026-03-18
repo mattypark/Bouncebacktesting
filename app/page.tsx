@@ -23,7 +23,7 @@ export default function Home() {
       <TextRevealSection
         id="slide-solution"
         text="So what did we do?"
-        className="flex w-full items-center justify-center bg-bb-lime py-48 pb-80 md:py-64 md:pb-150"
+        className="flex w-full items-center justify-center bg-bb-lime py-24 pb-32 md:py-32 md:pb-40"
       />
       <RecycledRevealSection />
       <TheProcessSection />
