@@ -154,7 +154,7 @@ export default function AboutPage() {
       </section>
 
       {/* ═══════════════════════════════════════════ */}
-      {/*  FOUNDER — Dillon Rosthenal                */}
+      {/*  FOUNDER — Dillon Rosenthal                */}
       {/* ═══════════════════════════════════════════ */}
       <section className="relative w-full bg-bb-deep py-24 md:py-32 lg:py-40 overflow-hidden">
         {/* Decorative gradient orbs */}
@@ -170,7 +170,7 @@ export default function AboutPage() {
               <div className="relative h-[380px] w-[300px] overflow-hidden rounded-2xl bg-bb-cream/10 md:h-[480px] md:w-[360px]">
                 <img
                   src="/dillon.png"
-                  alt="Dillon Rosthenal — Founder of BounceBack"
+                  alt="Dillon Rosenthal — Founder of BounceBack"
                   className="h-full w-full object-cover object-top"
                 />
               </div>
@@ -204,7 +204,7 @@ export default function AboutPage() {
               <h3 className="mt-4 text-4xl font-bold text-bb-cream md:text-5xl lg:text-6xl">
                 Dillon
                 <br />
-                <span className="text-bb-lime">Rosthenal</span>
+                <span className="text-bb-lime">Rosenthal</span>
               </h3>
             </Reveal>
 
