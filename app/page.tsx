@@ -4,7 +4,6 @@ import WasteStatSection from "@/components/WasteStatSection";
 import RecycledRevealSection from "@/components/RecycledRevealSection";
 import TheProcessSection from "@/components/TheProcessSection";
 import WhyChooseSection from "@/components/WhyChooseSection";
-import TestimonialsSection from "@/components/TestimonialsSection";
 
 import WaitlistSection from "@/components/WaitlistSection";
 import SmoothScroll from "@/components/SmoothScroll";
@@ -28,7 +27,6 @@ export default function Home() {
       <RecycledRevealSection />
       <TheProcessSection />
       <WhyChooseSection />
-      <TestimonialsSection />
       <WaitlistSection />
     </>
   );

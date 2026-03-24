@@ -94,7 +94,7 @@ export default function RecycledRevealSection() {
             muted
             playsInline
             loop
-            preload="none"
+            preload="metadata"
             className="block w-full"
           />
         </div>
