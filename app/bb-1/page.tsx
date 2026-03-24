@@ -1,13 +1,14 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import Image from "next/image";
 import NavBar from "@/components/NavBar";
 
 
 const videos = [
-  "/videos/bb1-clip-2.mov",
-  "/videos/bb1-clip-3.mov",
-  "/videos/bb1-clip-4.mov",
+  "/videos/bb1-clip-2.mp4",
+  "/videos/bb1-clip-3.mp4",
+  "/videos/bb1-clip-4.mp4",
 ];
 
 export default function BB1ProductPage() {
@@ -50,25 +51,34 @@ export default function BB1ProductPage() {
         {/* 3-ball stack — pack of 3 layout */}
         <div className="relative z-10 flex items-end justify-center">
           {/* Left ball — behind, lower-left */}
-          <img
+          <Image
             src="/bb1-ball.png"
             alt="BounceBack BB-1"
+            width={460}
+            height={460}
+            priority
             className="w-[140px] -mr-[80px] mb-0 drop-shadow-xl md:w-[380px] md:-mr-[215px] lg:w-[460px] lg:-mr-[340px]"
-            style={{ transform: "translateY(15%)" }}
+            style={{ transform: "translateY(15%)", height: "auto" }}
           />
           {/* Center ball — front, top */}
-          <img
+          <Image
             src="/bb1-ball.png"
             alt="BounceBack BB-1"
+            width={530}
+            height={530}
+            priority
             className="relative z-10 w-[160px] drop-shadow-2xl md:w-[440px] lg:w-[530px]"
-            style={{ transform: "translateY(-8%)" }}
+            style={{ transform: "translateY(-8%)", height: "auto" }}
           />
           {/* Right ball — behind, lower-right */}
-          <img
+          <Image
             src="/bb1-ball.png"
             alt="BounceBack BB-1"
+            width={460}
+            height={460}
+            priority
             className="w-[140px] -ml-[80px] mb-0 drop-shadow-xl md:w-[380px] md:-ml-[215px] lg:w-[460px] lg:-ml-[340px]"
-            style={{ transform: "translateY(15%)" }}
+            style={{ transform: "translateY(15%)", height: "auto" }}
           />
         </div>
       </section>

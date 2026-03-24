@@ -2,6 +2,7 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+import Image from "next/image";
 import NavBar from "@/components/NavBar";
 
 type Tab = "login" | "register";
@@ -138,7 +139,7 @@ function AccountContent() {
         <div className="mx-auto max-w-2xl px-6 pt-24 pb-20 md:pt-32">
           {/* Header */}
           <div className="flex flex-col items-center mb-12">
-            <img src="/bb-icon.png" alt="BounceBack" className="h-16 w-16 md:h-20 md:w-20" />
+            <Image src="/bb-icon.png" alt="BounceBack" width={80} height={80} className="h-16 w-16 md:h-20 md:w-20" />
             <h1 className="mt-3 text-xl font-bold tracking-[0.08em] text-bb-deep md:text-2xl">
               BOUNCEBACK ACCOUNT
             </h1>
@@ -188,7 +189,7 @@ function AccountContent() {
         <>
           {/* Header */}
           <div className="flex flex-col items-center pt-24 pb-8 md:pt-32 md:pb-10">
-            <img src="/bb-icon.png" alt="BounceBack" className="h-16 w-16 md:h-20 md:w-20" />
+            <Image src="/bb-icon.png" alt="BounceBack" width={80} height={80} className="h-16 w-16 md:h-20 md:w-20" />
             <h1 className="mt-3 text-xl font-bold tracking-[0.08em] text-bb-deep md:text-2xl">
               BOUNCEBACK ACCOUNT
             </h1>

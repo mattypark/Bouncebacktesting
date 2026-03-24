@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 import { useCart } from "./CartContext";
 
 export default function CartDrawer() {
@@ -128,9 +129,11 @@ export default function CartDrawer() {
                     >
                       {/* Product image */}
                       <div className="flex h-[100px] w-[100px] shrink-0 items-center justify-center overflow-hidden rounded-lg bg-bb-cream">
-                        <img
+                        <Image
                           src={item.image}
                           alt={item.name}
+                          width={100}
+                          height={100}
                           className="h-full w-full object-contain p-2"
                         />
                       </div>

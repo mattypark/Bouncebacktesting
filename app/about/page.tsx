@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
+import Image from "next/image";
 import NavBar from "@/components/NavBar";
 
 /* ───────────────────────────────────────────── */
@@ -168,9 +169,11 @@ export default function AboutPage() {
               {/* Lime accent frame offset behind photo */}
               <div className="absolute -bottom-4 -right-4 h-full w-full rounded-2xl border-2 border-bb-lime/30" />
               <div className="relative h-[380px] w-[300px] overflow-hidden rounded-2xl bg-bb-cream/10 md:h-[480px] md:w-[360px]">
-                <img
+                <Image
                   src="/dillon.png"
                   alt="Dillon Rosenthal — Founder of BounceBack"
+                  width={360}
+                  height={480}
                   className="h-full w-full object-cover object-top"
                 />
               </div>
@@ -329,51 +332,46 @@ export default function AboutPage() {
         <div className="hero-gradient absolute inset-0 opacity-90" />
 
         {/* Scattered pickleball images */}
-        <motion.img
-          src="/bb1-ball.png"
-          alt=""
-          aria-hidden
-          className="pointer-events-none absolute z-[1] w-[60px] opacity-35 md:w-[90px]"
+        <motion.div
+          className="pointer-events-none absolute z-[1] w-[60px] md:w-[90px]"
           style={{ top: "12%", left: "6%" }}
           animate={{ y: [0, -10, 0], rotate: [0, 8, 0] }}
           transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.img
-          src="/bb1-ball.png"
-          alt=""
-          aria-hidden
-          className="pointer-events-none absolute z-[1] w-[35px] opacity-30 md:w-[55px]"
+        >
+          <Image src="/bb1-ball.png" alt="" aria-hidden width={90} height={90} className="w-full h-auto opacity-35" />
+        </motion.div>
+        <motion.div
+          className="pointer-events-none absolute z-[1] w-[35px] md:w-[55px]"
           style={{ top: "28%", right: "10%" }}
           animate={{ y: [0, 8, 0], rotate: [0, -6, 0] }}
           transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-        />
-        <motion.img
-          src="/bb1-ball.png"
-          alt=""
-          aria-hidden
-          className="pointer-events-none absolute z-[1] w-[75px] opacity-30 md:w-[110px]"
+        >
+          <Image src="/bb1-ball.png" alt="" aria-hidden width={55} height={55} className="w-full h-auto opacity-30" />
+        </motion.div>
+        <motion.div
+          className="pointer-events-none absolute z-[1] w-[75px] md:w-[110px]"
           style={{ bottom: "15%", right: "5%" }}
           animate={{ y: [0, -12, 0], rotate: [0, 10, 0] }}
           transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-        />
-        <motion.img
-          src="/bb1-ball.png"
-          alt=""
-          aria-hidden
-          className="pointer-events-none absolute z-[1] w-[45px] opacity-25 md:w-[65px]"
+        >
+          <Image src="/bb1-ball.png" alt="" aria-hidden width={110} height={110} className="w-full h-auto opacity-30" />
+        </motion.div>
+        <motion.div
+          className="pointer-events-none absolute z-[1] w-[45px] md:w-[65px]"
           style={{ bottom: "22%", left: "8%" }}
           animate={{ y: [0, 6, 0], rotate: [0, -5, 0] }}
           transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
-        />
-        <motion.img
-          src="/bb1-ball.png"
-          alt=""
-          aria-hidden
-          className="pointer-events-none absolute z-[1] w-[28px] opacity-25 md:w-[40px]"
+        >
+          <Image src="/bb1-ball.png" alt="" aria-hidden width={65} height={65} className="w-full h-auto opacity-25" />
+        </motion.div>
+        <motion.div
+          className="pointer-events-none absolute z-[1] w-[28px] md:w-[40px]"
           style={{ top: "55%", left: "18%" }}
           animate={{ y: [0, -7, 0], rotate: [0, 12, 0] }}
           transition={{ duration: 6.5, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-        />
+        >
+          <Image src="/bb1-ball.png" alt="" aria-hidden width={40} height={40} className="w-full h-auto opacity-25" />
+        </motion.div>
 
         <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center px-8 py-24 text-center md:py-32">
           <Reveal>

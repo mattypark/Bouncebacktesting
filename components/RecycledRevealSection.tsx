@@ -90,11 +90,11 @@ export default function RecycledRevealSection() {
         <div className="relative overflow-hidden rounded-lg">
           <video
             ref={videoRef}
-            src="/recycled-reveal.mov"
+            src="/recycled-reveal.mp4"
             muted
             playsInline
             loop
-            preload="metadata"
+            preload="none"
             className="block w-full"
           />
         </div>

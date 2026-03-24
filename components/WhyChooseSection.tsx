@@ -1,6 +1,8 @@
+import Image from "next/image";
+
 export default function WhyChooseSection() {
   return (
-    <section className="w-full bg-bb-cream py-24 pb-36 md:py-32 md:pb-100">
+    <section className="w-full bg-bb-cream py-24 pb-24 md:py-32 md:pb-32">
       <div className="mx-auto max-w-7xl px-6 md:px-10">
         {/* Heading */}
         <h2 className="mb-16 text-center text-3xl font-bold text-black md:text-4xl lg:text-5xl">
@@ -12,7 +14,7 @@ export default function WhyChooseSection() {
           {/* Card 1 — Efficient recycling */}
           <div className="rounded-xl border-2 border-bb-lime bg-white p-8">
             <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-lg bg-bb-mint">
-              <img src="/actrecycling.png" alt="Recycling" className="h-7 w-7" />
+              <Image src="/actrecycling.png" alt="Recycling" width={28} height={28} className="h-7 w-7" />
             </div>
             <p className="mb-2 text-base font-bold text-black md:text-lg">
               Closed Loop Recycling.

@@ -7,7 +7,7 @@ const STEPS = [
     number: "1",
     title: "Collect",
     body: "Cracked pickleballs are collected in BounceBack bins and shipped out for reprocessing before they ever reach a landfill.",
-    video: "/processssss.mp4",
+    video: "/process1.mp4",
   },
   {
     number: "2",
@@ -72,7 +72,7 @@ export default function TheProcessSection() {
                   muted
                   playsInline
                   loop
-                  preload="metadata"
+                  preload="none"
                   className="absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ease-in-out"
                   style={{ opacity: active === i ? 1 : 0 }}
                 />

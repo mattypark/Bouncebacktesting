@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 import CartIcon from "./CartIcon";
 
 const menuLinks = [
@@ -9,6 +10,7 @@ const menuLinks = [
   { name: "About", href: "/about" },
   { name: "Buy Balls", href: "/bb-1" },
   { name: "Order a Bin", href: "/request-bin" },
+  { name: "Bin Locations", href: "/locations" },
   { name: "Account", href: "/account" },
 ];
 
@@ -205,12 +207,16 @@ export default function HeroSection() {
           ═══════════════════════════════════════════ */}
 
       {/* Ball — large, centered horizontally, upper-mid vertically */}
-      <img
+      <Image
         src="/bb1-ball.png"
         alt="BB-1 Recycled Pickleball"
+        width={500}
+        height={500}
+        priority
         className="animate-scale-in pointer-events-none absolute z-20 md:hidden"
         style={{
           width: "clamp(340px, 150vw, 500px)",
+          height: "auto",
           left: "50%",
           top: "clamp(220px, 37vh, 360px)",
           transform: "translateX(-40%)",
@@ -312,12 +318,16 @@ export default function HeroSection() {
       </div>
 
       {/* ─── BB-1 Ball Image (desktop only) ─── */}
-      <img
+      <Image
         src="/bb1-ball.png"
         alt="BB-1 Recycled Pickleball"
+        width={1300}
+        height={1300}
+        priority
         className="animate-scale-in pointer-events-none absolute z-20 hidden md:block"
         style={{
           width: "clamp(450px, 55vw, 1300px)",
+          height: "auto",
           right: "-5%",
           top: "50%",
           transform: "translateY(-45%)",
