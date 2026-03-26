@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 /*
   Floating ball config — each ball gets its own drift path & speed.
@@ -51,6 +51,9 @@ function buildKeyframes() {
 
 export default function WaitlistSection() {
   const styleRef = useRef<HTMLStyleElement | null>(null);
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     if (styleRef.current) return;
@@ -63,6 +66,37 @@ export default function WaitlistSection() {
       styleRef.current = null;
     };
   }, []);
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!email.trim()) return;
+
+    setStatus("loading");
+    setMessage("");
+
+    try {
+      const res = await fetch("/api/waitlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim() }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setStatus("error");
+        setMessage(data.error || "Something went wrong. Please try again.");
+        return;
+      }
+
+      setStatus("success");
+      setMessage("You're on the list! We'll be in touch.");
+      setEmail("");
+    } catch {
+      setStatus("error");
+      setMessage("Something went wrong. Please try again.");
+    }
+  }
 
   return (
     <section id="waitlist" className="relative w-full overflow-hidden bg-bb-cream pt-32 pb-64 md:pt-48 md:pb-80 lg:pt-64 lg:pb-[32rem]">
@@ -89,7 +123,7 @@ export default function WaitlistSection() {
         </p>
 
         {/* Email input bar */}
-        <div className="relative mx-auto mt-10 max-w-[560px] md:mt-14">
+        <form onSubmit={handleSubmit} className="relative mx-auto mt-10 max-w-[560px] md:mt-14">
           <span className="absolute -top-3 left-4 z-10 bg-bb-cream px-1.5 text-xs font-medium text-bb-mid">
             Email Address
           </span>
@@ -98,18 +132,34 @@ export default function WaitlistSection() {
             <div className="flex flex-1 items-center bg-bb-deep">
               <input
                 type="email"
+                required
                 placeholder="Email Address"
-                className="w-full bg-transparent px-6 py-4 text-sm text-white outline-none placeholder:text-white/30 md:py-5 md:text-base"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={status === "loading"}
+                className="w-full bg-transparent px-6 py-4 text-sm text-white outline-none placeholder:text-white/30 md:py-5 md:text-base disabled:opacity-50"
               />
             </div>
             <button
-              type="button"
-              className="shrink-0 bg-bb-lime px-10 py-4 text-sm font-semibold text-bb-deep transition-colors hover:bg-bb-mint md:px-14 md:py-5 md:text-base"
+              type="submit"
+              disabled={status === "loading"}
+              className="shrink-0 bg-bb-lime px-10 py-4 text-sm font-semibold text-bb-deep transition-colors hover:bg-bb-mint md:px-14 md:py-5 md:text-base disabled:opacity-60"
             >
-              Join
+              {status === "loading" ? "Joining..." : "Join"}
             </button>
           </div>
-        </div>
+
+          {/* Feedback message */}
+          {message && (
+            <p
+              className={`mt-4 text-sm font-medium ${
+                status === "success" ? "text-bb-deep" : "text-red-600"
+              }`}
+            >
+              {message}
+            </p>
+          )}
+        </form>
       </div>
     </section>
   );
