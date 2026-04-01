@@ -1,12 +1,18 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useScroll, useTransform, useInView } from "framer-motion";
-import Image from "next/image";
+import { useState, useRef, useMemo, useCallback } from "react";
+import { motion, useInView, AnimatePresence } from "framer-motion";
+import {
+  ComposableMap,
+  Geographies,
+  Geography,
+  Marker,
+  ZoomableGroup,
+} from "react-simple-maps";
 import NavBar from "@/components/NavBar";
 
 /* ───────────────────────────────────────────── */
-/*  Stagger wrapper — fades children in on view  */
+/*  Reveal wrapper                               */
 /* ───────────────────────────────────────────── */
 function Reveal({
   children,
@@ -35,401 +41,563 @@ function Reveal({
 }
 
 /* ───────────────────────────────────────────── */
+/*  TopoJSON URL                                 */
+/* ───────────────────────────────────────────── */
+const GEO_URL = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
+
+/* ───────────────────────────────────────────── */
 /*  Location data                                */
 /* ───────────────────────────────────────────── */
-// TODO: Replace with real bin locations once finalized
-const locations = [
+interface Location {
+  name: string;
+  city: string;
+  nonprofit: boolean;
+  coords: [number, number]; // [lng, lat]
+}
+
+interface StateData {
+  fips: string;
+  abbr: string;
+  name: string;
+  coords: [number, number];
+  zoomLevel: number;
+  locations: Location[];
+}
+
+const LOCATION_DATA: StateData[] = [
   {
-    name: "Location 1",
-    region: "Region TBD",
-    description: "Bin location details coming soon.",
-    address: "Address TBD",
-    binCount: 1,
-    status: "active" as const,
+    fips: "12",
+    abbr: "FL",
+    name: "Florida",
+    coords: [-81.5, 28.1],
+    zoomLevel: 4,
+    locations: [
+      { name: "South Sea Island", city: "Captiva", nonprofit: false, coords: [-82.19, 26.53] },
+      { name: "Eagle Scout Park", city: "Dunedin", nonprofit: false, coords: [-82.77, 28.02] },
+      { name: "Verdana Village", city: "Estero", nonprofit: false, coords: [-81.81, 26.44] },
+      { name: "Three Oaks Park", city: "Estero", nonprofit: false, coords: [-81.82, 26.42] },
+      { name: "Murano", city: "Estero", nonprofit: false, coords: [-81.80, 26.45] },
+      { name: "Shadowwood Preserve", city: "Estero", nonprofit: false, coords: [-81.83, 26.43] },
+      { name: "Ace Pickleball Club", city: "Fort Myers", nonprofit: false, coords: [-81.87, 26.64] },
+      { name: "Brooks Community Park", city: "Fort Myers", nonprofit: false, coords: [-81.86, 26.60] },
+      { name: "DNA Pickleball", city: "Fort Myers", nonprofit: false, coords: [-81.88, 26.62] },
+      { name: "The Landings", city: "Fort Myers", nonprofit: false, coords: [-81.85, 26.58] },
+      { name: "Bay Oaks Community Center", city: "Fort Myers", nonprofit: false, coords: [-81.94, 26.45] },
+      { name: "Plantation Recreation Resort", city: "Lady Lake", nonprofit: true, coords: [-81.93, 28.92] },
+      { name: "Dink House Pickleball Club", city: "Largo", nonprofit: false, coords: [-82.79, 27.91] },
+      { name: "Ace Pickleball Club", city: "Lutz", nonprofit: false, coords: [-82.46, 28.15] },
+      { name: "YMCA Marco Island", city: "Marco Island", nonprofit: false, coords: [-81.73, 25.94] },
+      { name: "Naples Pickleball Center", city: "Naples", nonprofit: true, coords: [-81.79, 26.14] },
+      { name: "Naples Heritage", city: "Naples", nonprofit: true, coords: [-81.77, 26.12] },
+      { name: "Valencia Trails", city: "Naples", nonprofit: true, coords: [-81.75, 26.16] },
+      { name: "Veterans Park", city: "Naples", nonprofit: true, coords: [-81.80, 26.18] },
+      { name: "Tampa Bay Pickleball Club", city: "Oldsmar", nonprofit: false, coords: [-82.67, 28.03] },
+      { name: "Orlando Advanced Pickleball", city: "Orlando", nonprofit: false, coords: [-81.38, 28.54] },
+      { name: "PicklePlex", city: "Punta Gorda", nonprofit: false, coords: [-82.05, 26.93] },
+      { name: "The Dunes", city: "Sanibel", nonprofit: false, coords: [-82.07, 26.44] },
+      { name: "Pickleball Shack SRQ", city: "Sarasota", nonprofit: false, coords: [-82.53, 27.34] },
+      { name: "Lakehouse Cove", city: "Sarasota", nonprofit: false, coords: [-82.51, 27.30] },
+      { name: "Cresswind Lakewood Ranch", city: "Sarasota", nonprofit: false, coords: [-82.41, 27.38] },
+      { name: "MP Tennis & Sports", city: "Tampa", nonprofit: false, coords: [-82.46, 27.95] },
+      { name: "Northdale Pickle Lounge", city: "Tampa", nonprofit: false, coords: [-82.51, 28.08] },
+      { name: "Tampa Pickleball Crew", city: "Tampa", nonprofit: false, coords: [-82.48, 27.98] },
+    ],
   },
   {
-    name: "Location 2",
-    region: "Region TBD",
-    description: "Bin location details coming soon.",
-    address: "Address TBD",
-    binCount: 1,
-    status: "active" as const,
+    fips: "06",
+    abbr: "CA",
+    name: "California",
+    coords: [-119.4, 36.8],
+    zoomLevel: 3.5,
+    locations: [
+      { name: "Tri Valley Pickleball Club", city: "Livermore", nonprofit: false, coords: [-121.77, 37.68] },
+      { name: "Tri Valley Pickleball Club", city: "San Ramon", nonprofit: false, coords: [-121.98, 37.78] },
+      { name: "Tri Valley Pickleball Club", city: "Pleasanton", nonprofit: false, coords: [-121.87, 37.66] },
+      { name: "Paseo Club", city: "Valencia", nonprofit: false, coords: [-118.56, 34.41] },
+      { name: "The Best Paddle Compound", city: "Los Angeles", nonprofit: false, coords: [-118.35, 34.05] },
+    ],
   },
   {
-    name: "Location 3",
-    region: "Region TBD",
-    description: "Bin location details coming soon.",
-    address: "Address TBD",
-    binCount: 1,
-    status: "active" as const,
+    fips: "13",
+    abbr: "GA",
+    name: "Georgia",
+    coords: [-83.5, 32.7],
+    zoomLevel: 5,
+    locations: [
+      { name: "Pickleball Clubs (2)", city: "Saint Mary's", nonprofit: true, coords: [-81.55, 30.73] },
+      { name: "Wilmington Island", city: "Savannah", nonprofit: true, coords: [-80.97, 32.00] },
+      { name: "Lake Mayer", city: "Savannah", nonprofit: true, coords: [-81.06, 32.02] },
+      { name: "Tybee YMCA", city: "Tybee Island", nonprofit: true, coords: [-80.85, 32.00] },
+    ],
+  },
+  {
+    fips: "47",
+    abbr: "TN",
+    name: "Tennessee",
+    coords: [-86.6, 35.7],
+    zoomLevel: 5,
+    locations: [
+      { name: "The Club at Fairvue Plantation", city: "Gallatin", nonprofit: true, coords: [-86.45, 36.39] },
+      { name: "Northfield Church", city: "Gallatin", nonprofit: true, coords: [-86.47, 36.38] },
+    ],
+  },
+  {
+    fips: "23",
+    abbr: "ME",
+    name: "Maine",
+    coords: [-69.4, 45.4],
+    zoomLevel: 5,
+    locations: [
+      { name: "The Wicked Pickle", city: "South Portland", nonprofit: true, coords: [-70.28, 43.63] },
+      { name: "The Point", city: "South Portland", nonprofit: true, coords: [-70.26, 43.64] },
+      { name: "Apex Racket & Fitness", city: "Portland", nonprofit: true, coords: [-70.26, 43.66] },
+      { name: "Deering Oaks Park", city: "Portland", nonprofit: true, coords: [-70.27, 43.66] },
+      { name: "The Picklr", city: "Westbrook", nonprofit: true, coords: [-70.37, 43.68] },
+      { name: "Auburn Public Courts", city: "Auburn", nonprofit: true, coords: [-70.24, 44.10] },
+      { name: "Fort Williams Park", city: "Cape Elizabeth", nonprofit: true, coords: [-70.21, 43.62] },
+      { name: "Loranger School Courts", city: "Old Orchard Beach", nonprofit: true, coords: [-70.38, 43.52] },
+      { name: "Seacoast Pickleball", city: "York", nonprofit: true, coords: [-70.64, 43.16] },
+      { name: "Williams Park", city: "Bangor", nonprofit: true, coords: [-68.77, 44.80] },
+      { name: "Bounce Pickleball", city: "Biddeford", nonprofit: true, coords: [-70.45, 43.49] },
+      { name: "Stearns High School", city: "Millinocket", nonprofit: true, coords: [-68.71, 45.66] },
+      { name: "Mattanawcook Jr. High School", city: "Lincoln", nonprofit: true, coords: [-68.51, 45.36] },
+      { name: "Messalonskee High School", city: "Oakland", nonprofit: true, coords: [-69.72, 44.54] },
+      { name: "South Portland High School", city: "South Portland", nonprofit: true, coords: [-70.30, 43.63] },
+      { name: "China Middle School", city: "South China", nonprofit: true, coords: [-69.58, 44.42] },
+    ],
+  },
+  {
+    fips: "25",
+    abbr: "MA",
+    name: "Massachusetts",
+    coords: [-71.8, 42.4],
+    zoomLevel: 7,
+    locations: [
+      { name: "Recreation Park @ Pomps Pond", city: "Andover", nonprofit: true, coords: [-71.14, 42.66] },
+      { name: "Doherty Gym Courts", city: "Braintree", nonprofit: true, coords: [-71.00, 42.20] },
+      { name: "NE Racquet @ Thayer Academy", city: "Braintree", nonprofit: true, coords: [-70.98, 42.21] },
+      { name: "Pickles", city: "Hanover", nonprofit: true, coords: [-70.81, 42.11] },
+      { name: "Boston Pickle Club", city: "Norwell", nonprofit: true, coords: [-70.79, 42.16] },
+      { name: "JCC", city: "Marblehead", nonprofit: true, coords: [-70.86, 42.50] },
+      { name: "Seaside Park", city: "Marblehead", nonprofit: true, coords: [-70.85, 42.50] },
+      { name: "Veterans Middle School", city: "Marblehead", nonprofit: true, coords: [-70.87, 42.49] },
+      { name: "New England Pickleball Club", city: "Middleton", nonprofit: true, coords: [-71.02, 42.60] },
+    ],
+  },
+  {
+    fips: "33",
+    abbr: "NH",
+    name: "New Hampshire",
+    coords: [-71.6, 43.8],
+    zoomLevel: 6,
+    locations: [
+      { name: "Foss Field", city: "Wolfeboro", nonprofit: true, coords: [-71.21, 43.58] },
+      { name: "Exeter Recreation Park", city: "Exeter", nonprofit: true, coords: [-70.95, 42.98] },
+      { name: "Eastman Courts", city: "Grantham", nonprofit: true, coords: [-72.14, 43.49] },
+      { name: "Prout Park", city: "Manchester", nonprofit: true, coords: [-71.45, 42.99] },
+      { name: "Portsmouth Public Courts", city: "Portsmouth", nonprofit: true, coords: [-70.76, 43.07] },
+      { name: "New England Pickleball Club", city: "Rye", nonprofit: true, coords: [-70.77, 43.01] },
+      { name: "Pickleball603", city: "East Hampstead", nonprofit: true, coords: [-71.16, 42.87] },
+      { name: "Seacoast Pickleball", city: "Newmarket", nonprofit: true, coords: [-70.94, 43.08] },
+    ],
+  },
+  {
+    fips: "19",
+    abbr: "IA",
+    name: "Iowa",
+    coords: [-93.5, 42.0],
+    zoomLevel: 5,
+    locations: [
+      { name: "Polk County Pickleball", city: "Des Moines", nonprofit: false, coords: [-93.6, 41.59] },
+    ],
   },
 ];
 
 /* ───────────────────────────────────────────── */
-/*  Pin icon SVG                                 */
+/*  Helpers                                      */
 /* ───────────────────────────────────────────── */
-function PinIcon({ className = "" }: { className?: string }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      className={className}
-    >
-      <path
-        fillRule="evenodd"
-        d="M11.54 22.351l.07.04.028.016a.76.76 0 00.723 0l.028-.015.071-.041a16.975 16.975 0 001.144-.742 19.58 19.58 0 002.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 00-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 002.682 2.282 16.975 16.975 0 001.145.742zM12 13.5a3 3 0 100-6 3 3 0 000 6z"
-        clipRule="evenodd"
-      />
-    </svg>
-  );
+function getStateColor(binCount: number): string {
+  if (binCount === 0) return "#e5e7eb";
+  if (binCount <= 3) return "#c6e6d4";
+  if (binCount <= 8) return "#7bc8a4";
+  if (binCount <= 16) return "#3a9d6e";
+  return "#084734";
 }
 
 /* ───────────────────────────────────────────── */
-/*  Recycle icon SVG                             */
+/*  Main Page Component                          */
 /* ───────────────────────────────────────────── */
-function RecycleBinIcon({ className = "" }: { className?: string }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={1.5}
-      className={className}
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m6 4.125l2.25 2.25m0 0l2.25 2.25M12 13.875l2.25-2.25M12 13.875l-2.25 2.25M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z"
-      />
-    </svg>
-  );
-}
-
 export default function LocationsPage() {
-  const heroRef = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: heroRef,
-    offset: ["start start", "end start"],
-  });
-  const heroY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+  const [hoveredState, setHoveredState] = useState<string | null>(null);
+  const [selectedState, setSelectedState] = useState<StateData | null>(null);
+  const [hoveredLocation, setHoveredLocation] = useState<Location | null>(null);
 
-  const totalBins = locations.reduce((sum, loc) => sum + loc.binCount, 0);
+  const stateDataByFips = useMemo(() => {
+    const m: Record<string, StateData> = {};
+    LOCATION_DATA.forEach((s) => { m[s.fips] = s; });
+    return m;
+  }, []);
+
+  const binCountByFips = useMemo(() => {
+    const m: Record<string, number> = {};
+    LOCATION_DATA.forEach((s) => { m[s.fips] = s.locations.length; });
+    return m;
+  }, []);
+
+  const totalBins = LOCATION_DATA.reduce((sum, s) => sum + s.locations.length, 0);
+  const totalStates = LOCATION_DATA.length;
+
+  const handleStateClick = useCallback((fips: string) => {
+    const state = stateDataByFips[fips];
+    if (state) {
+      setSelectedState(state);
+      setHoveredState(null);
+    }
+  }, [stateDataByFips]);
+
+  const handleBackClick = useCallback(() => {
+    setSelectedState(null);
+    setHoveredLocation(null);
+  }, []);
+
+  // Zoom center and level
+  const zoomCenter: [number, number] = selectedState
+    ? selectedState.coords
+    : [-96, 38];
+  const zoomLevel = selectedState ? selectedState.zoomLevel : 1;
 
   return (
     <div className="min-h-screen bg-bb-cream text-bb-deep overflow-x-hidden">
       <NavBar variant="dark" />
 
-      {/* ═══════════════════════════════════════════ */}
-      {/*  HERO                                      */}
-      {/* ═══════════════════════════════════════════ */}
-      <section
-        ref={heroRef}
-        className="relative flex min-h-[85vh] w-full items-center justify-center overflow-hidden"
-      >
-        {/* Giant background text */}
-        <motion.h1
-          style={{ y: heroY, opacity: heroOpacity }}
-          className="pointer-events-none absolute select-none font-black leading-none text-bb-deep/[0.04] whitespace-nowrap"
-          aria-hidden
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1.2 }}
-        >
-          <span
-            style={{
-              fontSize: "clamp(5rem, 28vw, 42rem)",
-              letterSpacing: "-0.04em",
-            }}
-          >
-            BINS
-          </span>
-        </motion.h1>
-
-        {/* Hero content */}
-        <div className="relative z-10 mx-auto flex max-w-6xl flex-col items-center px-8 text-center">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-bb-lime/20"
-          >
-            <PinIcon className="h-8 w-8 text-bb-deep" />
-          </motion.div>
-
-          <motion.h2
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: 0.8,
-              delay: 0.15,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-            className="text-4xl font-bold leading-[1.1] tracking-tight text-bb-deep md:text-6xl lg:text-7xl"
-          >
-            Find a Bin
-          </motion.h2>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: 0.7,
-              delay: 0.35,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-            className="mt-8 max-w-xl text-base leading-relaxed text-bb-deep/55 md:text-lg"
-          >
-            Locate the nearest BounceBack recycling bin and give your cracked
-            pickleballs a second life. Every ball dropped off is one less in a
-            landfill.
-          </motion.p>
-
-          {/* Scroll indicator */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1, duration: 0.8 }}
-            className="mt-16 flex flex-col items-center gap-2"
-          >
-            <span className="text-[10px] font-semibold tracking-[0.2em] text-bb-deep/30 uppercase">
-              Scroll
-            </span>
-            <motion.div
-              animate={{ y: [0, 8, 0] }}
-              transition={{
-                duration: 1.8,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-              className="h-8 w-[1px] bg-bb-deep/20"
-            />
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════ */}
-      {/*  STATS BAR                                 */}
-      {/* ═══════════════════════════════════════════ */}
-      <section className="w-full bg-bb-deep py-12 md:py-16">
-        <div className="mx-auto flex max-w-5xl flex-col items-center justify-center gap-8 px-8 md:flex-row md:gap-16 lg:gap-24">
-          <Reveal delay={0}>
-            <div className="text-center">
-              <p className="text-4xl font-black text-bb-lime md:text-5xl">
-                {locations.length}
-              </p>
-              <p className="mt-1 text-sm tracking-[0.15em] text-bb-cream/50 uppercase">
-                Cities
-              </p>
-            </div>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <div className="text-center">
-              <p className="text-4xl font-black text-bb-lime md:text-5xl">
-                {totalBins}
-              </p>
-              <p className="mt-1 text-sm tracking-[0.15em] text-bb-cream/50 uppercase">
-                Active Bins
-              </p>
-            </div>
-          </Reveal>
-          <Reveal delay={0.2}>
-            <div className="text-center">
-              <p className="text-4xl font-black text-bb-lime md:text-5xl">
-                SW FL
-              </p>
-              <p className="mt-1 text-sm tracking-[0.15em] text-bb-cream/50 uppercase">
-                Region
-              </p>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════ */}
-      {/*  LOCATIONS GRID                            */}
-      {/* ═══════════════════════════════════════════ */}
-      <section className="w-full bg-bb-cream py-24 md:py-32 lg:py-40">
-        <div className="mx-auto max-w-6xl px-8 lg:px-16">
+      {/* ═══ INTERACTIVE MAP WITH SIDE STATS ═══ */}
+      <section className="w-full bg-bb-cream pt-28 pb-16 md:pt-32 md:pb-24">
+        <div className="mx-auto max-w-6xl px-4 lg:px-8">
           <Reveal>
-            <p
-              className="text-sm font-light tracking-[0.2em] text-bb-deep/40 uppercase"
-              style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}
-            >
-              Our Locations
-            </p>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <h3 className="mt-4 text-3xl font-bold text-bb-deep md:text-5xl">
-              Active Bin Sites
-            </h3>
-          </Reveal>
-          <Reveal delay={0.15}>
-            <p className="mt-4 max-w-2xl text-base leading-relaxed text-bb-deep/50 md:text-lg">
-              Drop off your used and cracked pickleballs at any of our
-              collection points across Southwest Florida. We handle the rest.
-            </p>
-          </Reveal>
+            <div className="flex items-center gap-6 lg:gap-10">
+              {/* Left stat — Active Bins */}
+              <div className="hidden md:flex flex-col items-center justify-center min-w-[100px]">
+                <p className="text-4xl font-black text-bb-deep lg:text-5xl">{totalBins}</p>
+                <p className="mt-1 text-xs tracking-[0.15em] text-bb-deep/40 uppercase">Active Bins</p>
+              </div>
 
-          <div className="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {locations.map((loc, i) => (
-              <Reveal key={loc.name} delay={0.1 + i * 0.08}>
-                <motion.div
-                  whileHover={{ y: -6, transition: { duration: 0.3 } }}
-                  className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-bb-deep/8 bg-white p-8 shadow-sm transition-shadow duration-300 hover:shadow-xl"
+              {/* Map */}
+              <div className="relative flex-1 overflow-hidden rounded-2xl border border-bb-deep/10 bg-white p-4 shadow-sm md:p-8">
+                {/* Back button when zoomed */}
+                <AnimatePresence>
+                  {selectedState && (
+                    <motion.button
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -20 }}
+                      transition={{ duration: 0.3 }}
+                      onClick={handleBackClick}
+                      className="absolute top-4 left-4 z-30 flex items-center gap-2 rounded-lg bg-bb-deep px-4 py-2.5 text-sm font-semibold text-white shadow-lg hover:bg-bb-deep/90 transition-colors cursor-pointer"
+                    >
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M10 12L6 8L10 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                      All States
+                    </motion.button>
+                  )}
+                </AnimatePresence>
+
+                {/* State name overlay when zoomed */}
+                <AnimatePresence>
+                  {selectedState && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.3, delay: 0.2 }}
+                      className="absolute top-4 right-4 z-30 rounded-lg bg-bb-deep px-5 py-4 shadow-lg"
+                    >
+                      <p className="text-base font-bold text-bb-lime">{selectedState.name}</p>
+                      <p className="text-sm text-bb-cream/80 mt-1">
+                        {selectedState.locations.length} bin{selectedState.locations.length > 1 ? "s" : ""} &middot;{" "}
+                        {new Set(selectedState.locations.map((l) => l.city)).size} cities
+                      </p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                {/* Hovered location tooltip */}
+                <AnimatePresence>
+                  {hoveredLocation && selectedState && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.15 }}
+                      className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30 rounded-lg bg-bb-deep px-4 py-3 shadow-lg whitespace-nowrap"
+                    >
+                      <p className="text-sm font-bold text-white">
+                        {hoveredLocation.nonprofit && (
+                          <span className="text-bb-lime mr-1">★</span>
+                        )}
+                        {hoveredLocation.name}
+                      </p>
+                      <p className="text-xs text-bb-cream/60 mt-0.5">
+                        {hoveredLocation.city}
+                        {hoveredLocation.nonprofit && " · Non-Profit Partner"}
+                      </p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                <ComposableMap
+                  projection="geoAlbersUsa"
+                  projectionConfig={{ scale: 1000 }}
+                  width={960}
+                  height={600}
+                  style={{ width: "100%", height: "auto" }}
                 >
-                  {/* Top accent bar */}
-                  <div className="absolute inset-x-0 top-0 h-1 bg-bb-lime opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                  <ZoomableGroup
+                    center={zoomCenter}
+                    zoom={zoomLevel}
+                    filterZoomEvent={() => false}
+                    translateExtent={[[-200, -200], [1160, 800]]}
+                  >
+                    <Geographies geography={GEO_URL}>
+                      {({ geographies }) =>
+                        geographies.map((geo) => {
+                          const fips = geo.id;
+                          const binCount = binCountByFips[fips] || 0;
+                          const isHovered = hoveredState === fips;
+                          const isSelected = selectedState?.fips === fips;
+                          const isZoomed = !!selectedState;
 
-                  {/* Pin + Status */}
-                  <div className="flex items-start justify-between">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-bb-lime/15 transition-colors duration-300 group-hover:bg-bb-lime/30">
-                      <PinIcon className="h-6 w-6 text-bb-deep" />
-                    </div>
-                    <span className="flex items-center gap-1.5 rounded-full bg-green-50 px-3 py-1">
-                      <span className="h-2 w-2 rounded-full bg-green-500" />
-                      <span className="text-[11px] font-semibold text-green-700">
-                        Active
-                      </span>
-                    </span>
+                          let fill = getStateColor(binCount);
+                          if (isSelected) fill = "#c6e6d4";
+                          else if (isHovered && binCount > 0) fill = "#65BE44";
+                          else if (isZoomed && !isSelected) fill = "#e5e7eb";
+
+                          return (
+                            <Geography
+                              key={geo.rsmKey}
+                              geography={geo}
+                              fill={fill}
+                              stroke="#fff"
+                              strokeWidth={0.75}
+                              onMouseEnter={() => { if (binCount > 0 && !isZoomed) setHoveredState(fips); }}
+                              onMouseLeave={() => setHoveredState(null)}
+                              onClick={() => { if (binCount > 0) handleStateClick(fips); }}
+                              style={{
+                                default: { outline: "none", transition: "fill 0.3s ease" },
+                                hover: { outline: "none", cursor: binCount > 0 ? "pointer" : "default" },
+                                pressed: { outline: "none" },
+                              }}
+                            />
+                          );
+                        })
+                      }
+                    </Geographies>
+
+                    {/* State labels when NOT zoomed */}
+                    {!selectedState && LOCATION_DATA.map((state) => {
+                      const hasNP = state.locations.some((l) => l.nonprofit);
+                      const hasRegular = state.locations.some((l) => !l.nonprofit);
+                      return (
+                        <Marker key={state.abbr} coordinates={state.coords}>
+                          {hasRegular && (
+                            <circle
+                              r={4}
+                              fill="#084734"
+                              stroke="#fff"
+                              strokeWidth={1.5}
+                              cx={hasNP ? -7 : 0}
+                            />
+                          )}
+                          {hasNP && (
+                            <polygon
+                              points="0,-5 1.5,-1.5 5.5,-1.5 2.5,1 3.5,5 0,2.5 -3.5,5 -2.5,1 -5.5,-1.5 -1.5,-1.5"
+                              fill="#084734"
+                              stroke="#fff"
+                              strokeWidth={0.8}
+                              transform={`translate(${hasRegular ? 7 : 0}, 0)`}
+                            />
+                          )}
+                          <text
+                            textAnchor="middle"
+                            y={14}
+                            style={{
+                              fontFamily: "system-ui, sans-serif",
+                              fontSize: 10,
+                              fontWeight: 700,
+                              fill: "#084734",
+                            }}
+                          >
+                            {state.abbr}
+                          </text>
+                        </Marker>
+                      );
+                    })}
+
+                    {/* Individual location markers when zoomed */}
+                    {selectedState && selectedState.locations.map((loc, i) => (
+                      <Marker key={`loc-${i}`} coordinates={loc.coords}>
+                        {loc.nonprofit ? (
+                          <g
+                            onMouseEnter={() => setHoveredLocation(loc)}
+                            onMouseLeave={() => setHoveredLocation(null)}
+                            style={{ cursor: "pointer" }}
+                          >
+                            <polygon
+                              points="0,-6 1.8,-1.8 6.6,-1.8 3,1.2 4.2,6 0,3 -4.2,6 -3,1.2 -6.6,-1.8 -1.8,-1.8"
+                              fill="#084734"
+                              stroke="#fff"
+                              strokeWidth={1}
+                            />
+                          </g>
+                        ) : (
+                          <g
+                            onMouseEnter={() => setHoveredLocation(loc)}
+                            onMouseLeave={() => setHoveredLocation(null)}
+                            style={{ cursor: "pointer" }}
+                          >
+                            <circle
+                              r={4.5}
+                              fill="#65BE44"
+                              stroke="#fff"
+                              strokeWidth={1.5}
+                            />
+                          </g>
+                        )}
+                      </Marker>
+                    ))}
+                  </ZoomableGroup>
+                </ComposableMap>
+
+                {/* Tooltip when NOT zoomed */}
+                {!selectedState && hoveredState && stateDataByFips[hoveredState] && (
+                  <div className="absolute top-4 right-4 rounded-lg bg-bb-deep px-5 py-4 shadow-lg z-20">
+                    <p className="text-base font-bold text-bb-lime">
+                      {stateDataByFips[hoveredState].name}
+                    </p>
+                    <p className="text-sm text-bb-cream/80 mt-1">
+                      {stateDataByFips[hoveredState].locations.length} bin
+                      {stateDataByFips[hoveredState].locations.length > 1 ? "s" : ""} &middot;{" "}
+                      {new Set(stateDataByFips[hoveredState].locations.map((l) => l.city)).size} cities
+                    </p>
+                    {stateDataByFips[hoveredState].locations.some((l) => l.nonprofit) && (
+                      <p className="mt-1 text-xs text-bb-lime/70">
+                        Non-Profit Partner
+                      </p>
+                    )}
+                    <p className="mt-2 text-[10px] text-bb-cream/40">Click to explore</p>
                   </div>
+                )}
+              </div>
 
-                  {/* Location info */}
-                  <h4 className="mt-5 text-xl font-bold text-bb-deep">
-                    {loc.name}
-                  </h4>
-                  <p className="mt-1 text-xs font-medium tracking-[0.1em] text-bb-mid uppercase">
-                    {loc.region}
-                  </p>
-                  <p className="mt-3 flex-1 text-sm leading-relaxed text-bb-deep/50">
-                    {loc.description}
-                  </p>
+              {/* Right stat — States */}
+              <div className="hidden md:flex flex-col items-center justify-center min-w-[100px]">
+                <p className="text-4xl font-black text-bb-deep lg:text-5xl">{totalStates}</p>
+                <p className="mt-1 text-xs tracking-[0.15em] text-bb-deep/40 uppercase">States</p>
+              </div>
+            </div>
 
-                  {/* Bottom details */}
-                  <div className="mt-6 flex items-center justify-between border-t border-bb-deep/6 pt-4">
-                    <span className="text-xs text-bb-deep/40">
-                      {loc.address}
-                    </span>
-                    <span className="flex items-center gap-1 text-xs font-semibold text-bb-deep/60">
-                      <RecycleBinIcon className="h-4 w-4" />
-                      {loc.binCount} {loc.binCount === 1 ? "bin" : "bins"}
-                    </span>
-                  </div>
-                </motion.div>
-              </Reveal>
-            ))}
+            {/* Mobile stats — visible below map on small screens */}
+            <div className="mt-6 flex justify-center gap-12 md:hidden">
+              <div className="text-center">
+                <p className="text-3xl font-black text-bb-deep">{totalBins}</p>
+                <p className="mt-1 text-xs tracking-[0.15em] text-bb-deep/40 uppercase">Active Bins</p>
+              </div>
+              <div className="text-center">
+                <p className="text-3xl font-black text-bb-deep">{totalStates}</p>
+                <p className="mt-1 text-xs tracking-[0.15em] text-bb-deep/40 uppercase">States</p>
+              </div>
+            </div>
+          </Reveal>
 
-            {/* "Coming Soon" card */}
-            <Reveal delay={0.1 + locations.length * 0.08}>
-              <motion.div
-                whileHover={{ y: -6, transition: { duration: 0.3 } }}
-                className="group relative flex h-full flex-col items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed border-bb-deep/15 bg-bb-cream p-8 text-center transition-colors duration-300 hover:border-bb-lime/50 hover:bg-bb-lime/5"
-              >
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-bb-deep/5">
-                  <span className="text-2xl">+</span>
-                </div>
-                <h4 className="mt-4 text-lg font-bold text-bb-deep">
-                  More Coming Soon
-                </h4>
-                <p className="mt-2 text-sm text-bb-deep/40">
-                  We&apos;re expanding across Florida and beyond. Request a bin
-                  for your area below.
-                </p>
-              </motion.div>
-            </Reveal>
+          {/* Legend */}
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-sm text-bb-deep/60">
+            <div className="flex items-center gap-2">
+              <span className="inline-block h-3 w-3 rounded-full bg-[#65BE44]" />
+              <span>BounceBack Bin</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <svg width="14" height="14" viewBox="-6 -6 12 12">
+                <polygon
+                  points="0,-5 1.5,-1.5 5.5,-1.5 2.5,1 3.5,5 0,2.5 -3.5,5 -2.5,1 -5.5,-1.5 -1.5,-1.5"
+                  fill="#084734"
+                />
+              </svg>
+              <span>Non-Profit Partner</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="flex gap-0.5">
+                {["#c6e6d4", "#7bc8a4", "#3a9d6e", "#084734"].map((c) => (
+                  <span key={c} className="inline-block h-3 w-6 rounded-sm" style={{ backgroundColor: c }} />
+                ))}
+              </div>
+              <span>More bins = darker</span>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════ */}
-      {/*  HOW IT WORKS                              */}
-      {/* ═══════════════════════════════════════════ */}
-      <section className="relative w-full bg-bb-mint/40 py-24 md:py-32 lg:py-40 overflow-hidden">
-        <div className="mx-auto max-w-5xl px-8 lg:px-16">
+      {/* ═══ LOCATION LIST ═══ */}
+      <section className="w-full bg-bb-mint/30 py-20 md:py-28">
+        <div className="mx-auto max-w-6xl px-6 lg:px-16">
           <Reveal>
-            <p
-              className="text-sm font-light tracking-[0.2em] text-bb-deep/40 uppercase"
-              style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}
-            >
-              How It Works
+            <h3 className="text-3xl font-bold text-bb-deep md:text-4xl">
+              All Locations
+            </h3>
+            <p className="mt-3 text-base text-bb-deep/50">
+              Locations partnered with non-profit organizations are marked with a star.
             </p>
           </Reveal>
-          <Reveal delay={0.1}>
-            <h3 className="mt-4 text-3xl font-bold text-bb-deep md:text-5xl">
-              Three Simple Steps
-            </h3>
-          </Reveal>
 
-          <div className="mt-16 grid grid-cols-1 gap-10 md:grid-cols-3 md:gap-8">
-            {[
-              {
-                step: "01",
-                title: "Find a Bin",
-                body: "Locate the nearest BounceBack recycling bin at a facility in your area using this page.",
-              },
-              {
-                step: "02",
-                title: "Drop Off",
-                body: "Toss your cracked, dead, or unwanted pickleballs into the bin. Any brand, any condition.",
-              },
-              {
-                step: "03",
-                title: "We Recycle",
-                body: "We collect, process, and transform the old balls into brand-new, player-grade BB-1 pickleballs.",
-              },
-            ].map((item, i) => (
-              <Reveal key={item.step} delay={0.15 + i * 0.12}>
-                <div className="relative pl-0">
-                  <span className="text-6xl font-black text-bb-lime/30">
-                    {item.step}
-                  </span>
-                  <h4 className="mt-2 text-xl font-bold text-bb-deep">
-                    {item.title}
-                  </h4>
-                  <p className="mt-3 text-sm leading-relaxed text-bb-deep/50">
-                    {item.body}
-                  </p>
-                </div>
-              </Reveal>
-            ))}
+          <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {[...LOCATION_DATA].sort((a, b) => a.name.localeCompare(b.name)).map((state, i) => {
+              const allNP = state.locations.every((l) => l.nonprofit);
+              const someNP = state.locations.some((l) => l.nonprofit);
+              return (
+                <Reveal key={state.abbr} delay={0.05 * i}>
+                  <div className="h-full rounded-xl border border-bb-deep/8 bg-white p-6 shadow-sm">
+                    <div className="flex items-center justify-between mb-4">
+                      <h4 className="text-lg font-bold text-bb-deep">{state.name}</h4>
+                      <div className="flex items-center gap-2">
+                        {someNP && (
+                          <span className="rounded-full bg-bb-lime/20 px-2.5 py-0.5 text-[10px] font-semibold text-bb-deep tracking-wide">
+                            {allNP ? "Non-Profit" : "Mixed"}
+                          </span>
+                        )}
+                        <span className="text-xs font-semibold text-bb-deep/40">
+                          {state.locations.length} bin{state.locations.length > 1 ? "s" : ""}
+                        </span>
+                      </div>
+                    </div>
+                    <ul className="space-y-2">
+                      {state.locations.map((loc, j) => (
+                        <li key={j} className="flex items-start gap-2 text-sm text-bb-deep/70">
+                          {loc.nonprofit ? (
+                            <svg width="12" height="12" viewBox="-6 -6 12 12" className="mt-0.5 shrink-0">
+                              <polygon
+                                points="0,-5 1.5,-1.5 5.5,-1.5 2.5,1 3.5,5 0,2.5 -3.5,5 -2.5,1 -5.5,-1.5 -1.5,-1.5"
+                                fill="#084734"
+                              />
+                            </svg>
+                          ) : (
+                            <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-bb-deep" />
+                          )}
+                          <span>
+                            {loc.name} <span className="text-bb-deep/40">— {loc.city}</span>
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </Reveal>
+              );
+            })}
           </div>
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════ */}
-      {/*  CTA — Request a bin                       */}
-      {/* ═══════════════════════════════════════════ */}
+      {/* ═══ CTA ═══ */}
       <section className="relative w-full overflow-hidden">
         <div className="hero-gradient absolute inset-0 opacity-90" />
-
-        {/* Floating pickleballs */}
-        <motion.div
-          className="pointer-events-none absolute z-[1] w-[60px] md:w-[90px]"
-          style={{ top: "12%", left: "6%" }}
-          animate={{ y: [0, -10, 0], rotate: [0, 8, 0] }}
-          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-        >
-          <Image src="/bb1-ball.png" alt="" aria-hidden width={90} height={90} className="w-full h-auto opacity-35" />
-        </motion.div>
-        <motion.div
-          className="pointer-events-none absolute z-[1] w-[35px] md:w-[55px]"
-          style={{ top: "28%", right: "10%" }}
-          animate={{ y: [0, 8, 0], rotate: [0, -6, 0] }}
-          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-        >
-          <Image src="/bb1-ball.png" alt="" aria-hidden width={55} height={55} className="w-full h-auto opacity-30" />
-        </motion.div>
-        <motion.div
-          className="pointer-events-none absolute z-[1] w-[75px] md:w-[110px]"
-          style={{ bottom: "15%", right: "5%" }}
-          animate={{ y: [0, -12, 0], rotate: [0, 10, 0] }}
-          transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-        >
-          <Image src="/bb1-ball.png" alt="" aria-hidden width={110} height={110} className="w-full h-auto opacity-30" />
-        </motion.div>
-
         <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center px-8 py-24 text-center md:py-32">
           <Reveal>
             <h3 className="text-3xl font-bold text-white md:text-5xl lg:text-6xl">
@@ -462,9 +630,7 @@ export default function LocationsPage() {
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════ */}
-      {/*  FOOTER                                    */}
-      {/* ═══════════════════════════════════════════ */}
+      {/* ═══ FOOTER ═══ */}
       <footer className="border-t border-bb-deep/10 bg-bb-cream px-10 py-8 md:px-12 lg:px-16">
         <div className="flex items-end justify-between">
           <p className="text-sm text-bb-deep/30">

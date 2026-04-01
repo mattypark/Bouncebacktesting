@@ -8,12 +8,12 @@ export async function POST(req: Request) {
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   );
-  const { name, email, phone, organization, message } = await req.json();
+  const { name, email, phone, organization, relationship, message } = await req.json();
 
   // Store bin request in Supabase
   const { error: dbError } = await supabase
     .from("bin_requests")
-    .insert({ name, email, phone: phone || null, organization: organization || null, message: message || null });
+    .insert({ name, email, phone: phone || null, organization: organization || null, relationship: relationship || null, message: message || null });
 
   if (dbError) {
     console.error("Supabase insert error:", dbError);
@@ -30,6 +30,7 @@ Name: ${name}
 Email: ${email}
 Phone: ${phone || "Not provided"}
 Organization: ${organization || "Not provided"}
+Relationship to Facility: ${relationship || "Not provided"}
 Message: ${message || "None"}`,
   });
 

@@ -51,6 +51,7 @@ export default function RequestBinPage() {
     email: "",
     phone: "",
     organization: "",
+    relationship: "",
     message: "",
   });
   const [joinWaitlist, setJoinWaitlist] = useState(false);
@@ -199,6 +200,22 @@ export default function RequestBinPage() {
                   value={formData.organization}
                   onChange={handleChange}
                   placeholder="Club name, facility, or organization"
+                  className="w-full rounded-xl bg-bb-deep px-6 py-4 text-sm text-white outline-none placeholder:text-white/30 md:py-5 md:text-base"
+                />
+              </div>
+
+              {/* Relationship to Facility */}
+              <div className="relative">
+                <span className="absolute -top-3 left-4 z-10 bg-bb-cream px-1.5 text-xs font-medium text-bb-mid">
+                  Relationship to Facility
+                </span>
+                <input
+                  type="text"
+                  name="relationship"
+                  required
+                  value={formData.relationship}
+                  onChange={handleChange}
+                  placeholder="Player, owner, manager, head pro, employee, etc."
                   className="w-full rounded-xl bg-bb-deep px-6 py-4 text-sm text-white outline-none placeholder:text-white/30 md:py-5 md:text-base"
                 />
               </div>
