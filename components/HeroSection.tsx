@@ -167,7 +167,7 @@ export default function HeroSection() {
                 }}
               >
                 <a
-                  href="/request-bin"
+                  href="#waitlist"
                   onClick={() => setIsMenuOpen(false)}
                   className="group relative text-sm font-semibold tracking-[0.15em] text-bb-lime/80 transition-colors duration-300 hover:text-bb-lime"
                 >
@@ -256,7 +256,7 @@ export default function HeroSection() {
 
         <div className="animate-fade-in-up-delayed-3 mt-5 flex items-center gap-3">
           <a
-            href="/request-bin"
+            href="#waitlist"
             className="inline-block border-2 border-white px-5 py-2.5 text-[10px] font-semibold tracking-[0.15em] text-white transition-all duration-300 hover:bg-white hover:text-bb-deep"
           >
             JOIN THE MOVEMENT
@@ -300,7 +300,7 @@ export default function HeroSection() {
         {/* CTA Buttons */}
         <div className="animate-fade-in-up-delayed-3 mt-7 flex items-center gap-4">
           <a
-            href="/request-bin"
+            href="#waitlist"
             className="inline-block border-2 border-white px-8 py-3.5 text-xs font-semibold tracking-[0.15em] text-white transition-all duration-300 hover:bg-white hover:text-bb-deep"
           >
             JOIN THE MOVEMENT
