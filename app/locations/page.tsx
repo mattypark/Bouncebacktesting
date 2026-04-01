@@ -431,8 +431,11 @@ export default function LocationsPage() {
                       transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                     >
                       <ComposableMap
-                        projection="geoAlbersUsa"
-                        projectionConfig={{ scale: 1000 * selectedState.zoomLevel }}
+                        projection="geoMercator"
+                        projectionConfig={{
+                          center: selectedState.coords,
+                          scale: selectedState.zoomLevel * 1000,
+                        }}
                         width={960}
                         height={600}
                         style={{ width: "100%", height: "auto" }}
@@ -447,9 +450,9 @@ export default function LocationsPage() {
                                 <Geography
                                   key={geo.rsmKey}
                                   geography={geo}
-                                  fill={isSelected ? "#c6e6d4" : "#e5e7eb"}
+                                  fill={isSelected ? "#c6e6d4" : "#f3f4f6"}
                                   stroke="#fff"
-                                  strokeWidth={0.75}
+                                  strokeWidth={0.5}
                                   style={{
                                     default: { outline: "none" },
                                     hover: { outline: "none" },
@@ -470,10 +473,10 @@ export default function LocationsPage() {
                                 style={{ cursor: "pointer" }}
                               >
                                 <polygon
-                                  points="0,-6 1.8,-1.8 6.6,-1.8 3,1.2 4.2,6 0,3 -4.2,6 -3,1.2 -6.6,-1.8 -1.8,-1.8"
+                                  points="0,-8 2.4,-2.4 8.8,-2.4 4,1.6 5.6,8 0,4 -5.6,8 -4,1.6 -8.8,-2.4 -2.4,-2.4"
                                   fill="#084734"
                                   stroke="#fff"
-                                  strokeWidth={1}
+                                  strokeWidth={1.5}
                                 />
                               </g>
                             ) : (
@@ -483,10 +486,10 @@ export default function LocationsPage() {
                                 style={{ cursor: "pointer" }}
                               >
                                 <circle
-                                  r={4.5}
+                                  r={6}
                                   fill="#65BE44"
                                   stroke="#fff"
-                                  strokeWidth={1.5}
+                                  strokeWidth={2}
                                 />
                               </g>
                             )}
