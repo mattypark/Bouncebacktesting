@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Image from "next/image";
 import CartIcon from "./CartIcon";
 
 const menuLinks = [
@@ -207,12 +206,10 @@ export default function HeroSection() {
           ═══════════════════════════════════════════ */}
 
       {/* Ball — large, centered horizontally, upper-mid vertically */}
-      <Image
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
         src="/bb1-ball.png"
         alt="BB-1 Recycled Pickleball"
-        width={500}
-        height={500}
-        priority
         className="animate-scale-in pointer-events-none absolute z-20 md:hidden"
         style={{
           width: "clamp(340px, 150vw, 500px)",
@@ -318,12 +315,10 @@ export default function HeroSection() {
       </div>
 
       {/* ─── BB-1 Ball Image (desktop only) ─── */}
-      <Image
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
         src="/bb1-ball.png"
         alt="BB-1 Recycled Pickleball"
-        width={1300}
-        height={1300}
-        priority
         className="animate-scale-in pointer-events-none absolute z-20 hidden md:block"
         style={{
           width: "clamp(450px, 55vw, 1300px)",
