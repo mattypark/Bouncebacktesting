@@ -7,7 +7,6 @@ import {
   Geographies,
   Geography,
   Marker,
-  ZoomableGroup,
 } from "react-simple-maps";
 import NavBar from "@/components/NavBar";
 
@@ -260,12 +259,6 @@ export default function LocationsPage() {
     setHoveredLocation(null);
   }, []);
 
-  // Zoom center and level
-  const zoomCenter: [number, number] = selectedState
-    ? selectedState.coords
-    : [-96, 38];
-  const zoomLevel = selectedState ? selectedState.zoomLevel : 1;
-
   return (
     <div className="min-h-screen bg-bb-cream text-bb-deep overflow-x-hidden">
       <NavBar variant="dark" />
@@ -345,128 +338,164 @@ export default function LocationsPage() {
                   )}
                 </AnimatePresence>
 
-                <ComposableMap
-                  projection="geoAlbersUsa"
-                  projectionConfig={{ scale: 1000 }}
-                  width={960}
-                  height={600}
-                  style={{ width: "100%", height: "auto" }}
-                >
-                  <ZoomableGroup
-                    center={zoomCenter}
-                    zoom={zoomLevel}
-                    filterZoomEvent={() => false}
-                    translateExtent={[[-200, -200], [1160, 800]]}
-                  >
-                    <Geographies geography={GEO_URL}>
-                      {({ geographies }) =>
-                        geographies.map((geo) => {
-                          const fips = geo.id;
-                          const binCount = binCountByFips[fips] || 0;
-                          const isHovered = hoveredState === fips;
-                          const isSelected = selectedState?.fips === fips;
-                          const isZoomed = !!selectedState;
+                <AnimatePresence mode="wait">
+                  {!selectedState ? (
+                    <motion.div
+                      key="overview"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0, scale: 1.1 }}
+                      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                    >
+                      <ComposableMap
+                        projection="geoAlbersUsa"
+                        projectionConfig={{ scale: 1000 }}
+                        width={960}
+                        height={600}
+                        style={{ width: "100%", height: "auto" }}
+                      >
+                        <Geographies geography={GEO_URL}>
+                          {({ geographies }) =>
+                            geographies.map((geo) => {
+                              const fips = geo.id;
+                              const binCount = binCountByFips[fips] || 0;
+                              const isHovered = hoveredState === fips;
 
-                          let fill = getStateColor(binCount);
-                          if (isSelected) fill = "#c6e6d4";
-                          else if (isHovered && binCount > 0) fill = "#65BE44";
-                          else if (isZoomed && !isSelected) fill = "#e5e7eb";
+                              return (
+                                <Geography
+                                  key={geo.rsmKey}
+                                  geography={geo}
+                                  fill={isHovered && binCount > 0 ? "#65BE44" : getStateColor(binCount)}
+                                  stroke="#fff"
+                                  strokeWidth={0.75}
+                                  onMouseEnter={() => { if (binCount > 0) setHoveredState(fips); }}
+                                  onMouseLeave={() => setHoveredState(null)}
+                                  onClick={() => { if (binCount > 0) handleStateClick(fips); }}
+                                  style={{
+                                    default: { outline: "none", transition: "fill 0.3s ease" },
+                                    hover: { outline: "none", cursor: binCount > 0 ? "pointer" : "default" },
+                                    pressed: { outline: "none" },
+                                  }}
+                                />
+                              );
+                            })
+                          }
+                        </Geographies>
 
+                        {LOCATION_DATA.map((state) => {
+                          const hasNP = state.locations.some((l) => l.nonprofit);
+                          const hasRegular = state.locations.some((l) => !l.nonprofit);
                           return (
-                            <Geography
-                              key={geo.rsmKey}
-                              geography={geo}
-                              fill={fill}
-                              stroke="#fff"
-                              strokeWidth={0.75}
-                              onMouseEnter={() => { if (binCount > 0 && !isZoomed) setHoveredState(fips); }}
-                              onMouseLeave={() => setHoveredState(null)}
-                              onClick={() => { if (binCount > 0) handleStateClick(fips); }}
-                              style={{
-                                default: { outline: "none", transition: "fill 0.3s ease" },
-                                hover: { outline: "none", cursor: binCount > 0 ? "pointer" : "default" },
-                                pressed: { outline: "none" },
-                              }}
-                            />
+                            <Marker key={state.abbr} coordinates={state.coords}>
+                              {hasRegular && (
+                                <circle
+                                  r={4}
+                                  fill="#084734"
+                                  stroke="#fff"
+                                  strokeWidth={1.5}
+                                  cx={hasNP ? -7 : 0}
+                                />
+                              )}
+                              {hasNP && (
+                                <polygon
+                                  points="0,-5 1.5,-1.5 5.5,-1.5 2.5,1 3.5,5 0,2.5 -3.5,5 -2.5,1 -5.5,-1.5 -1.5,-1.5"
+                                  fill="#084734"
+                                  stroke="#fff"
+                                  strokeWidth={0.8}
+                                  transform={`translate(${hasRegular ? 7 : 0}, 0)`}
+                                />
+                              )}
+                              <text
+                                textAnchor="middle"
+                                y={14}
+                                style={{
+                                  fontFamily: "system-ui, sans-serif",
+                                  fontSize: 10,
+                                  fontWeight: 700,
+                                  fill: "#084734",
+                                }}
+                              >
+                                {state.abbr}
+                              </text>
+                            </Marker>
                           );
-                        })
-                      }
-                    </Geographies>
+                        })}
+                      </ComposableMap>
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key={`zoomed-${selectedState.fips}`}
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.9 }}
+                      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                    >
+                      <ComposableMap
+                        projection="geoAlbersUsa"
+                        projectionConfig={{ scale: 1000 * selectedState.zoomLevel }}
+                        width={960}
+                        height={600}
+                        style={{ width: "100%", height: "auto" }}
+                      >
+                        <Geographies geography={GEO_URL}>
+                          {({ geographies }) =>
+                            geographies.map((geo) => {
+                              const fips = geo.id;
+                              const isSelected = selectedState.fips === fips;
 
-                    {/* State labels when NOT zoomed */}
-                    {!selectedState && LOCATION_DATA.map((state) => {
-                      const hasNP = state.locations.some((l) => l.nonprofit);
-                      const hasRegular = state.locations.some((l) => !l.nonprofit);
-                      return (
-                        <Marker key={state.abbr} coordinates={state.coords}>
-                          {hasRegular && (
-                            <circle
-                              r={4}
-                              fill="#084734"
-                              stroke="#fff"
-                              strokeWidth={1.5}
-                              cx={hasNP ? -7 : 0}
-                            />
-                          )}
-                          {hasNP && (
-                            <polygon
-                              points="0,-5 1.5,-1.5 5.5,-1.5 2.5,1 3.5,5 0,2.5 -3.5,5 -2.5,1 -5.5,-1.5 -1.5,-1.5"
-                              fill="#084734"
-                              stroke="#fff"
-                              strokeWidth={0.8}
-                              transform={`translate(${hasRegular ? 7 : 0}, 0)`}
-                            />
-                          )}
-                          <text
-                            textAnchor="middle"
-                            y={14}
-                            style={{
-                              fontFamily: "system-ui, sans-serif",
-                              fontSize: 10,
-                              fontWeight: 700,
-                              fill: "#084734",
-                            }}
-                          >
-                            {state.abbr}
-                          </text>
-                        </Marker>
-                      );
-                    })}
+                              return (
+                                <Geography
+                                  key={geo.rsmKey}
+                                  geography={geo}
+                                  fill={isSelected ? "#c6e6d4" : "#e5e7eb"}
+                                  stroke="#fff"
+                                  strokeWidth={0.75}
+                                  style={{
+                                    default: { outline: "none" },
+                                    hover: { outline: "none" },
+                                    pressed: { outline: "none" },
+                                  }}
+                                />
+                              );
+                            })
+                          }
+                        </Geographies>
 
-                    {/* Individual location markers when zoomed */}
-                    {selectedState && selectedState.locations.map((loc, i) => (
-                      <Marker key={`loc-${i}`} coordinates={loc.coords}>
-                        {loc.nonprofit ? (
-                          <g
-                            onMouseEnter={() => setHoveredLocation(loc)}
-                            onMouseLeave={() => setHoveredLocation(null)}
-                            style={{ cursor: "pointer" }}
-                          >
-                            <polygon
-                              points="0,-6 1.8,-1.8 6.6,-1.8 3,1.2 4.2,6 0,3 -4.2,6 -3,1.2 -6.6,-1.8 -1.8,-1.8"
-                              fill="#084734"
-                              stroke="#fff"
-                              strokeWidth={1}
-                            />
-                          </g>
-                        ) : (
-                          <g
-                            onMouseEnter={() => setHoveredLocation(loc)}
-                            onMouseLeave={() => setHoveredLocation(null)}
-                            style={{ cursor: "pointer" }}
-                          >
-                            <circle
-                              r={4.5}
-                              fill="#65BE44"
-                              stroke="#fff"
-                              strokeWidth={1.5}
-                            />
-                          </g>
-                        )}
-                      </Marker>
-                    ))}
-                  </ZoomableGroup>
-                </ComposableMap>
+                        {selectedState.locations.map((loc, i) => (
+                          <Marker key={`loc-${i}`} coordinates={loc.coords}>
+                            {loc.nonprofit ? (
+                              <g
+                                onMouseEnter={() => setHoveredLocation(loc)}
+                                onMouseLeave={() => setHoveredLocation(null)}
+                                style={{ cursor: "pointer" }}
+                              >
+                                <polygon
+                                  points="0,-6 1.8,-1.8 6.6,-1.8 3,1.2 4.2,6 0,3 -4.2,6 -3,1.2 -6.6,-1.8 -1.8,-1.8"
+                                  fill="#084734"
+                                  stroke="#fff"
+                                  strokeWidth={1}
+                                />
+                              </g>
+                            ) : (
+                              <g
+                                onMouseEnter={() => setHoveredLocation(loc)}
+                                onMouseLeave={() => setHoveredLocation(null)}
+                                style={{ cursor: "pointer" }}
+                              >
+                                <circle
+                                  r={4.5}
+                                  fill="#65BE44"
+                                  stroke="#fff"
+                                  strokeWidth={1.5}
+                                />
+                              </g>
+                            )}
+                          </Marker>
+                        ))}
+                      </ComposableMap>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
                 {/* Tooltip when NOT zoomed */}
                 {!selectedState && hoveredState && stateDataByFips[hoveredState] && (
