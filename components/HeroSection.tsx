@@ -306,7 +306,7 @@ export default function HeroSection() {
         </p>
 
         {/* CTA Buttons */}
-        <div className="animate-fade-in-up-delayed-3 mt-7 flex flex-col gap-3">
+        <div className="animate-fade-in-up-delayed-3 mt-7 inline-flex flex-col gap-3">
           <div className="flex items-center gap-4">
             <a
               href="#waitlist"
@@ -323,7 +323,7 @@ export default function HeroSection() {
           </div>
           <a
             href="/bb-1"
-            className="inline-block w-full bg-white py-3.5 text-center text-xs font-semibold tracking-[0.15em] text-bb-deep transition-all duration-300 hover:bg-bb-lime"
+            className="block w-full bg-white py-3.5 text-center text-xs font-semibold tracking-[0.15em] text-bb-deep transition-all duration-300 hover:bg-bb-lime"
           >
             BUY BB-1
           </a>
