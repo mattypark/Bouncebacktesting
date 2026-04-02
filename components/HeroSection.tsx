@@ -254,18 +254,26 @@ export default function HeroSection() {
           performance as professional balls.
         </p>
 
-        <div className="animate-fade-in-up-delayed-3 mt-5 flex items-center gap-3">
-          <a
-            href="#waitlist"
-            className="inline-block border-2 border-white px-5 py-2.5 text-[10px] font-semibold tracking-[0.15em] text-white transition-all duration-300 hover:bg-white hover:text-bb-deep"
-          >
-            JOIN THE MOVEMENT
-          </a>
+        <div className="animate-fade-in-up-delayed-3 mt-5 flex flex-col gap-2.5">
+          <div className="flex items-center gap-3">
+            <a
+              href="#waitlist"
+              className="inline-block border-2 border-white px-5 py-2.5 text-[10px] font-semibold tracking-[0.15em] text-white transition-all duration-300 hover:bg-white hover:text-bb-deep"
+            >
+              JOIN THE MOVEMENT
+            </a>
+            <a
+              href="/request-bin"
+              className="inline-block border-2 border-white px-5 py-2.5 text-[10px] font-semibold tracking-[0.15em] text-white transition-all duration-300 hover:bg-white hover:text-bb-deep"
+            >
+              ORDER A BIN
+            </a>
+          </div>
           <a
             href="/bb-1"
-            className="inline-block bg-white px-5 py-2.5 text-[10px] font-semibold tracking-[0.15em] text-bb-deep transition-all duration-300 hover:bg-bb-lime"
+            className="inline-block w-full bg-white py-2.5 text-center text-[10px] font-semibold tracking-[0.15em] text-bb-deep transition-all duration-300 hover:bg-bb-lime"
           >
-            Buy BB-1
+            BUY BB-1
           </a>
         </div>
       </div>
@@ -298,16 +306,24 @@ export default function HeroSection() {
         </p>
 
         {/* CTA Buttons */}
-        <div className="animate-fade-in-up-delayed-3 mt-7 flex items-center gap-4">
-          <a
-            href="#waitlist"
-            className="inline-block border-2 border-white px-8 py-3.5 text-xs font-semibold tracking-[0.15em] text-white transition-all duration-300 hover:bg-white hover:text-bb-deep"
-          >
-            JOIN THE MOVEMENT
-          </a>
+        <div className="animate-fade-in-up-delayed-3 mt-7 flex flex-col gap-3">
+          <div className="flex items-center gap-4">
+            <a
+              href="#waitlist"
+              className="inline-block border-2 border-white px-8 py-3.5 text-xs font-semibold tracking-[0.15em] text-white transition-all duration-300 hover:bg-white hover:text-bb-deep"
+            >
+              JOIN THE MOVEMENT
+            </a>
+            <a
+              href="/request-bin"
+              className="inline-block border-2 border-white px-8 py-3.5 text-xs font-semibold tracking-[0.15em] text-white transition-all duration-300 hover:bg-white hover:text-bb-deep"
+            >
+              ORDER A BIN
+            </a>
+          </div>
           <a
             href="/bb-1"
-            className="inline-block bg-white px-8 py-3.5 text-xs font-semibold tracking-[0.15em] text-bb-deep transition-all duration-300 hover:bg-bb-lime"
+            className="inline-block w-full bg-white py-3.5 text-center text-xs font-semibold tracking-[0.15em] text-bb-deep transition-all duration-300 hover:bg-bb-lime"
           >
             BUY BB-1
           </a>
