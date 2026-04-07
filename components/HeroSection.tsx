@@ -263,17 +263,17 @@ export default function HeroSection() {
               JOIN THE MOVEMENT
             </a>
             <a
-              href="/request-bin"
+              href="/bb-1"
               className="inline-block border-2 border-white px-5 py-2.5 text-[10px] font-semibold tracking-[0.15em] text-white transition-all duration-300 hover:bg-white hover:text-bb-deep"
             >
-              ORDER A BIN
+              BUY BB-1
             </a>
           </div>
           <a
-            href="/bb-1"
+            href="/request-bin"
             className="inline-block w-full bg-white py-2.5 text-center text-[10px] font-semibold tracking-[0.15em] text-bb-deep transition-all duration-300 hover:bg-bb-lime"
           >
-            BUY BB-1
+            START RECYCLING - ORDER A BIN
           </a>
         </div>
       </div>
@@ -315,17 +315,17 @@ export default function HeroSection() {
               JOIN THE MOVEMENT
             </a>
             <a
-              href="/request-bin"
+              href="/bb-1"
               className="inline-block border-2 border-white px-8 py-3.5 text-xs font-semibold tracking-[0.15em] text-white transition-all duration-300 hover:bg-white hover:text-bb-deep"
             >
-              ORDER A BIN
+              BUY BB-1
             </a>
           </div>
           <a
-            href="/bb-1"
+            href="/request-bin"
             className="block w-full bg-white py-3.5 text-center text-xs font-semibold tracking-[0.15em] text-bb-deep transition-all duration-300 hover:bg-bb-lime"
           >
-            BUY BB-1
+            START RECYCLING - ORDER A BIN
           </a>
         </div>
       </div>
