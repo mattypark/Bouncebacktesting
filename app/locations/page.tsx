@@ -201,6 +201,16 @@ const LOCATION_DATA: StateData[] = [
     ],
   },
   {
+    fips: "36",
+    abbr: "NY",
+    name: "New York",
+    coords: [-75.5, 43.0],
+    zoomLevel: 4.5,
+    locations: [
+      { name: "The Pickle Complex", city: "Syosset", nonprofit: false, coords: [-73.50, 40.82] },
+    ],
+  },
+  {
     fips: "19",
     abbr: "IA",
     name: "Iowa",
