@@ -2,6 +2,7 @@ import HeroSection from "@/components/HeroSection";
 import TextRevealSection from "@/components/TextRevealSection";
 import WasteStatSection from "@/components/WasteStatSection";
 import RecycledRevealSection from "@/components/RecycledRevealSection";
+import PinScrollImpactSection from "@/components/PinScrollImpactSection";
 import TheProcessSection from "@/components/TheProcessSection";
 import WhyChooseSection from "@/components/WhyChooseSection";
 
@@ -25,6 +26,7 @@ export default function Home() {
         className="flex w-full items-center justify-center bg-bb-lime py-24 pb-32 md:py-32 md:pb-40"
       />
       <RecycledRevealSection />
+      <PinScrollImpactSection />
       <TheProcessSection />
       <WhyChooseSection />
       <WaitlistSection />
